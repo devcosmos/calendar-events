@@ -4,15 +4,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./app/src/core/i18n/i18n.ts');
 
 const nextConfig: NextConfig = {
-  basePath: '/schedule',
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'test.ru',
-      },
-    ],
-  },
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? '',
   trailingSlash: true,
   async headers() {
     return [
