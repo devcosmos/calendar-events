@@ -1,0 +1,46 @@
+{
+  "route-title": {
+    "/": "Home",
+    "/calendar/": "Calendar",
+    "/settings/": "Account",
+    "/settings/language/": "Language",
+    "/favourites/": "Favourites",
+    "/search/": "Search",
+    "/not-found/": "Page not found"
+  },
+  "/settings/": {
+    "contact-support": "Contact support",
+    "hide-empty-days": "Hide empty days",
+    "language": "Language",
+    "current-language-value": "English"
+  },
+  "/settings/language/": {
+    "notice": "Please note: changing the language only translates the app interface — event names remain unchanged."
+  },
+  "/favourites/": {
+    "empty-page-title": "You can now add events to favourites"
+  },
+  "/search/": {
+    "search-placeholder": "Event, location or date",
+    "no-results": "No results",
+    "load-error": "Unfortunately, the data couldn’t be loaded at the moment. Please try reloading the page or contact support for assistance."
+  },
+  "/not-found/": {
+    "not-found": "Page not found",
+    "go-homepage": "Go to homepage"
+  },
+  "tab-bar": {
+    "today": "Today",
+    "favourites": "Favourites",
+    "account": "Account",
+    "popup-title": "Something is coming soon 🪄",
+    "popup-message": "Stay updated on new features in our channel",
+    "popup-check-button": "Check what’s in the channel"
+  },
+  "calendar": {
+    "empty-month": "No events this month",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "nearest-event": "Nearest event"
+  }
+}

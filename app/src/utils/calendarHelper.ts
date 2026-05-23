@@ -1,0 +1,55 @@
+import { CalendarMonth, SwimEvent } from '@utils/types';
+
+/**
+ * Возвращает число с существительным в правильной форме для русского языка.
+ * @param n - Число
+ * @param one - Форма для 1 (например, «событие»)
+ * @param few - Форма для 2–4 (например, «события»)
+ * @param many - Форма для 5+ (например, «событий»)
+ * @example plural(21, 'яблоко', 'яблока', 'яблок') → "21 яблоко"
+ */
+export function plural(n: number, one: string, few: string, many: string): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod100 >= 11 && mod100 <= 14) return `${n} ${many}`;
+  if (mod10 === 1) return `${n} ${one}`;
+  if (mod10 >= 2 && mod10 <= 4) return `${n} ${few}`;
+  return `${n} ${many}`;
+}
+
+/**
+ * Группирует события по месяцам, сортируя по дате.
+ */
+export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
+  const monthMap = new Map<string, CalendarMonth>();
+
+  events.forEach((event) => {
+    const date = new Date(event.start_date);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const key = `${year}-${String(month).padStart(2, '0')}`;
+
+    if (!monthMap.has(key)) {
+      monthMap.set(key, { year, month, events: [] });
+    }
+    monthMap.get(key)!.events.push(event);
+  });
+
+  return Array.from(monthMap.values()).sort((a, b) => (a.year !== b.year ? a.year - b.year : a.month - b.month));
+}
+
+/**
+ * Возвращает индекс текущего месяца в массиве CalendarMonth.
+ * Если текущий месяц не найден — возвращает индекс ближайшего будущего месяца.
+ */
+export function getCurrentMonthIndex(months: CalendarMonth[]): number {
+  const now = new Date();
+  const currYear = now.getFullYear();
+  const currMonth = now.getMonth() + 1;
+
+  const exact = months.findIndex((m) => m.year === currYear && m.month === currMonth);
+  if (exact >= 0) return exact;
+
+  const future = months.findIndex((m) => m.year > currYear || (m.year === currYear && m.month > currMonth));
+  return future >= 0 ? future : months.length - 1;
+}

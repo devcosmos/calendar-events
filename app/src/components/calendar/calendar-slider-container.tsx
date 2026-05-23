@@ -1,0 +1,3 @@
+export default function CalendarSliderContainer({ children }: React.PropsWithChildren) {
+  return <div className="h-full overflow-y-auto scrollbar mx-3 pb-10">{children}</div>;
+}

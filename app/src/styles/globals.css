@@ -1,0 +1,38 @@
+@import 'swiper/css';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+html,
+body {
+  height: -webkit-fill-available;
+}
+
+@layer base {
+  html {
+    @apply overflow-hidden overscroll-y-contain min-h-full scrollbar:!hidden;
+  }
+  body {
+    @apply text-tg-text-color bg-tg-secondary-bg-color;
+    @apply overflow-x-hidden overscroll-y-contain min-h-full scrollbar:!hidden;
+  }
+  main {
+    height: var(--tg-viewport-height, 100dvh);
+    min-height: 100dvh;
+    padding-bottom: var(--tg-viewport-safe-area-inset-bottom, 0px);
+  }
+}
+
+@layer utilities {
+  .scrollbar {
+    @apply scrollbar:!w-0 scrollbar:!hidden scrollbar:!h-1.5 scrollbar:bg-transparent;
+    @apply scrollbar-thumb:!border-0;
+  }
+  .visually-hidden {
+    @apply !w-px !h-px !p-0 !-mt-px !overflow-hidden !whitespace-nowrap !border-0;
+    clip: rect(0, 0, 0, 0) !important;
+  }
+  .siblings-col-span-2 ~ span {
+    grid-column: span 2 / span 2;
+  }
+}

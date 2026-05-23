@@ -1,0 +1,27 @@
+{
+  // Настройки редактора
+  "editor.formatOnSave": true,
+
+  // HTML
+  "html.completion.attributeDefaultValue": "doublequotes",
+  "html.format.preserveNewLines": false,
+  "html.format.wrapLineLength": 0,
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.includeLanguages": { "astro": "html" },
+
+  // JavaScript/TypeScript
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ESLint & Jest
+  "eslint.nodeEnv": "",
+  "eslint.workingDirectories": ["./", "./project"],
+  "jestrunner.jestCommand": "npm run test --",
+  "jestrunner.codeLens": ["run"]
+}
