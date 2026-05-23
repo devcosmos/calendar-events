@@ -4,7 +4,6 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./app/src/core/i18n/i18n.ts');
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
   basePath: '/schedule',
   images: {
     remotePatterns: [
