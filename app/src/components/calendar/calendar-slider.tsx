@@ -29,10 +29,12 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
 
   // Only render prev/curr/next months
   const visibleSlides: { month: CalendarMonth; index: number }[] = [];
-  if (displayIndex > 0) visibleSlides.push({ month: months[displayIndex - 1], index: displayIndex - 1 });
-  visibleSlides.push({ month: months[displayIndex], index: displayIndex });
-  if (displayIndex < months.length - 1)
-    visibleSlides.push({ month: months[displayIndex + 1], index: displayIndex + 1 });
+  if (months.length > 0) {
+    if (displayIndex > 0) visibleSlides.push({ month: months[displayIndex - 1], index: displayIndex - 1 });
+    visibleSlides.push({ month: months[displayIndex], index: displayIndex });
+    if (displayIndex < months.length - 1)
+      visibleSlides.push({ month: months[displayIndex + 1], index: displayIndex + 1 });
+  }
 
   return (
     <Swiper

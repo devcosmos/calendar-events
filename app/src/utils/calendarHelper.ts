@@ -43,6 +43,8 @@ export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
  * Если текущий месяц не найден — возвращает индекс ближайшего будущего месяца.
  */
 export function getCurrentMonthIndex(months: CalendarMonth[]): number {
+  if (months.length === 0) return 0;
+
   const now = new Date();
   const currYear = now.getFullYear();
   const currMonth = now.getMonth() + 1;

@@ -1,32 +1,8 @@
 import { unstable_cache } from 'next/cache';
 
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import eventsJson from '@public/data/events.json';
 
 import { SwimEvent } from '@utils/types';
-
-/**
- * Загружает JSON-файл из локальной директории.
- *
- * Функция загружает и парсит JSON-файл, расположенный в переданном пути.
- *
- * @param path Путь к JSON-файлу, относительно корневой директории проекта. ('public/data/groups.json')
- * @returns Объект с загруженными данными из JSON-файла.
- * @throws null, если файл не найден или произошла ошибка парсинга.
- */
-export async function fetchFromLocal<T>(path: string): Promise<T | null> {
-  const filePath = join(process.cwd(), path);
-
-  try {
-    const data = JSON.parse(readFileSync(filePath, 'utf8')) as T;
-
-    return data;
-  } catch (error) {
-    console.error(`Ошибка загрузки локального файла: ${path}`, error);
-
-    return null;
-  }
-}
 
 /**
  * Выполняет HTTP-запрос к переданному URL и возвращает данные.
@@ -58,7 +34,7 @@ export async function fetchFromUrl<T>(url: string): Promise<T | null> {
 
 export const getCachedEvents = unstable_cache(
   async (): Promise<SwimEvent[] | null> => {
-    return await fetchFromLocal<SwimEvent[]>('public/data/events.json');
+    return eventsJson as SwimEvent[];
   },
   ['events'],
   { revalidate: 3_600 * 24 },
