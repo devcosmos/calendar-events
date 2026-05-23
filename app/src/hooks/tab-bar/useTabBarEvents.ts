@@ -3,35 +3,23 @@ import { usePathname } from 'next/navigation';
 
 import { postEvent } from '@tma.js/sdk-react';
 
-import { useMainStore } from '@store/mainStore';
 import { useSwiperStore } from '@store/swiperStore';
 
-import { AppRoute, DataQuerySelector, TabBarButton } from '@utils/consts';
+import { AppRoute, DataQuerySelector } from '@utils/consts';
 
 export const useTabBarEvents = () => {
   const pathname = usePathname();
 
   const t = useTranslations('tab-bar');
 
-  const { tabSelection, setTabSelection } = useMainStore();
-
-  const {
-    swiper,
-    setSelectedMonthIndex,
-    currMonthIndex,
-    selectedMonthIndex,
-    setSelectedWeekIndex,
-    currWeekIndex,
-    selectedWeekIndex,
-  } = useSwiperStore();
+  const { swiper, setSelectedMonthIndex, currMonthIndex, setSelectedWeekIndex, currWeekIndex, selectedWeekIndex } =
+    useSwiperStore();
   const isOnCalendar = pathname === AppRoute.Home;
 
   const handleNavigationButtonClick = (
     event: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>,
     querySelector: DataQuerySelector.Today | DataQuerySelector.Tomorrow,
   ) => {
-    setTabSelection(TabBarButton.Today);
-
     if (!swiper) return;
 
     if (isOnCalendar) {

@@ -46,7 +46,7 @@ export default function Favourites() {
         })
         .map((favourite) => (
           <div className="flex flex-nowrap flex-1 gap-2" key={favourite.id}>
-            <FavouriteButton size={ButtonSize.Medium} educationEntity={favourite} />
+            <FavouriteButton size={ButtonSize.Medium} SwimEvent={favourite} />
             <ActionButton className="flex-1 w-auto capitalize" title={favourite.name} href={AppRoute.Home} />
           </div>
         ))}

@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 import { DEFAULT_LOCALE, Locale } from '@core/i18n/config';
 
-import { TabBarButton, UserType } from '@utils/consts';
+import { UserType } from '@utils/consts';
 
 interface State {
   debugMode: boolean;
@@ -12,7 +12,6 @@ interface State {
   hideEmptyDays: boolean;
   hintForSwiping: boolean;
   hasSubmittedPromoGoal: boolean;
-  tabSelection: TabBarButton;
 }
 
 interface Actions {
@@ -22,7 +21,6 @@ interface Actions {
   setHideEmptyDays: (show: boolean) => void;
   hideHintForSwiping: () => void;
   setHasSubmittedPromoGoal: () => void;
-  setTabSelection: (tab: TabBarButton) => void;
 }
 
 const migrate = (persistedState: unknown): State => {
@@ -35,7 +33,6 @@ const migrate = (persistedState: unknown): State => {
     hideEmptyDays: state.hideEmptyDays ?? false,
     hintForSwiping: state.hintForSwiping ?? true,
     hasSubmittedPromoGoal: state.hasSubmittedPromoGoal ?? false,
-    tabSelection: state.tabSelection ?? TabBarButton.Today,
   };
 };
 
@@ -54,8 +51,6 @@ export const useMainStore = create<State & Actions>()(
       hideHintForSwiping: () => set({ hintForSwiping: false }),
       hasSubmittedPromoGoal: false,
       setHasSubmittedPromoGoal: () => set({ hasSubmittedPromoGoal: true }),
-      tabSelection: TabBarButton.Today,
-      setTabSelection: (tab) => set({ tabSelection: tab }),
     }),
     {
       version: 2,

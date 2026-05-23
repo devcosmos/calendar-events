@@ -9,19 +9,19 @@ import { Star } from '@components/icon/custom';
 import { useFavouritesStore } from '@store/favouritesStore';
 
 import { ButtonSize } from '@utils/consts';
-import { EducationEntity } from '@utils/types';
+import { SwimEvent } from '@utils/types';
 
 interface FavouriteButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  educationEntity: EducationEntity;
+  SwimEvent: SwimEvent;
   size?: ButtonSize;
 }
 
-export default function FavouriteButton({ educationEntity, size = ButtonSize.Base }: FavouriteButtonProps) {
+export default function FavouriteButton({ SwimEvent, size = ButtonSize.Base }: FavouriteButtonProps) {
   const starRef = useRef<HTMLElement>(null);
 
   const { isFavourite, addFavourite, removeFavourite } = useFavouritesStore();
 
-  const isFavouriteEntity = isFavourite(educationEntity);
+  const isFavouriteEntity = isFavourite(SwimEvent);
 
   const handleFavouriteButtonClick = () => {
     if (starRef.current) {
@@ -40,9 +40,9 @@ export default function FavouriteButton({ educationEntity, size = ButtonSize.Bas
     postEvent('web_app_trigger_haptic_feedback', { type: 'selection_change' });
 
     if (isFavouriteEntity) {
-      removeFavourite(educationEntity);
+      removeFavourite(SwimEvent);
     } else {
-      addFavourite(educationEntity);
+      addFavourite(SwimEvent);
     }
   };
 

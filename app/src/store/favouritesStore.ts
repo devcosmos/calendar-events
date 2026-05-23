@@ -1,19 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { EducationEntity } from '@utils/types';
+import { SwimEvent } from '@utils/types';
 
 interface State {
-  favourites: EducationEntity[];
-  searchHistory: EducationEntity[];
+  favourites: SwimEvent[];
+  searchHistory: SwimEvent[];
 }
 
 interface Actions {
-  isFavourite: (item: EducationEntity) => boolean;
-  addFavourite: (item: EducationEntity) => void;
-  removeFavourite: (item: EducationEntity) => void;
-  addSearchHistoryItem: (item: EducationEntity) => void;
-  removeSearchHistoryItem: (item: EducationEntity) => void;
+  isFavourite: (item: SwimEvent) => boolean;
+  addFavourite: (item: SwimEvent) => void;
+  removeFavourite: (item: SwimEvent) => void;
+  addSearchHistoryItem: (item: SwimEvent) => void;
+  removeSearchHistoryItem: (item: SwimEvent) => void;
 }
 
 export const useFavouritesStore = create<State & Actions>()(
@@ -23,7 +23,9 @@ export const useFavouritesStore = create<State & Actions>()(
       isFavourite: (item) => get().favourites.some((element) => element.id === item.id),
       addFavourite: (item) => {
         set((state) => ({
-          favourites: state.favourites.some((fav) => fav.id === item.id) ? state.favourites : [item, ...state.favourites],
+          favourites: state.favourites.some((fav) => fav.id === item.id)
+            ? state.favourites
+            : [item, ...state.favourites],
         }));
       },
       removeFavourite: (item) => {

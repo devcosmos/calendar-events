@@ -1,7 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
 
 import { ComboboxInput } from '@headlessui/react';
 import clsx from 'clsx';
@@ -16,8 +15,6 @@ interface SearchInputProps {
 
 export default function SearchInput({ inputRef, query, setQuery }: SearchInputProps) {
   const t = useTranslations(AppRoute.Search);
-
-  const pathname = usePathname();
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 

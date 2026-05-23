@@ -7,14 +7,11 @@ import TapBarButton from '@components/tab-bar/tap-bar-button';
 
 import { useTabBarEvents } from '@hooks/tab-bar/useTabBarEvents';
 
-import { useMainStore } from '@store/mainStore';
-
 import { AppRoute, DataQuerySelector, TabBarButton } from '@utils/consts';
 
 export default function TabBar() {
   const t = useTranslations('tab-bar');
 
-  const { tabSelection } = useMainStore();
   const { pathname, handleNavigationButtonClick } = useTabBarEvents();
 
   return (
@@ -30,7 +27,7 @@ export default function TabBar() {
         href={AppRoute.Home}
         title={t(TabBarButton.Today)}
         onClick={(event) => handleNavigationButtonClick(event, DataQuerySelector.Today)}
-        isActive={pathname === AppRoute.Home && tabSelection === TabBarButton.Today}
+        isActive={pathname === AppRoute.Home}
       >
         <span className="flex items-center justify-center size-9 bg-tg-link-color text-white p-0 rounded-full leading-none text-lg">
           {new Date().getDate()}
