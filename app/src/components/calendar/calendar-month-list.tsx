@@ -36,7 +36,7 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
   );
 
   return (
-    <div className="flex flex-col py-3">
+    <div className="flex flex-col">
       {byYear.map(({ year, items }) => (
         <div key={year}>
           <h3 className="mb-3 pt-1 mt-2 flex justify-between items-center">
