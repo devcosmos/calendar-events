@@ -34,7 +34,7 @@ export default function Button({
       {children}
       {addIcon && (
         <ChevronRight
-          className={clsx('!size-5 -me-1.5', outline ? '!fill-tg-link-color' : '!fill-tg-button-text-color')}
+          className={clsx('!size-4 -me-1.5', outline ? '!fill-tg-link-color' : '!fill-tg-button-text-color')}
         />
       )}
     </>
