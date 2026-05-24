@@ -36,8 +36,7 @@ export default function DayHeader({
         {...((isToday || isNearest || isTomorrow) && {
           [DataQuerySelector.Today]: '',
         })}
-        {...(isTomorrow && { [DataQuerySelector.Tomorrow]: '' })}
-        className={clsx('grid mb-3 pt-1 mt-2', isToday || isTomorrow || isNearest ? 'grid-cols-5' : 'grid-cols-2')}
+        className={clsx('grid mb-3 pt-1 mt-2', isToday || isTomorrow || isNearest ? 'grid-cols-4' : 'grid-cols-2')}
       >
         {children}
         <span>
@@ -46,7 +45,7 @@ export default function DayHeader({
           }).toUpperCase()}
         </span>
         {(isToday || isTomorrow || isNearest) && (
-          <span className="text-orange text-center col-span-3">
+          <span className="text-orange text-center col-span-2">
             {t(isNearest ? 'nearest-event' : isToday ? 'today' : 'tomorrow')}
           </span>
         )}

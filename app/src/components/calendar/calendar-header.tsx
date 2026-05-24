@@ -65,7 +65,7 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
         </div>
         <Button
           onClick={() => swiper?.slideTo(0)}
-          className="bg-tg-section-bg-color border-tg-section-bg-color !text-sm text-tg-link-color !py-3.5 !rounded-2xl !w-auto text-nowrap"
+          className="bg-tg-section-bg-color border-tg-section-bg-color capitalize !text-sm text-tg-link-color !py-3.5 !rounded-2xl !w-auto text-nowrap"
         >
           {monthName}
         </Button>
