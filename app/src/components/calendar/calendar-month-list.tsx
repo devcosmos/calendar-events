@@ -78,7 +78,9 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
                       )}
                     >
                       {label}
-                      <span className="text-base opacity-50">&nbsp;&mdash;&nbsp;{month.events.length}</span>
+                      {month.events.length > 0 && (
+                        <span className="text-base opacity-50">&nbsp;&mdash;&nbsp;{month.events.length}</span>
+                      )}
                     </span>
                   </div>
                 </Button>
