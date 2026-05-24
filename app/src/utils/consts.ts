@@ -40,7 +40,6 @@ export enum DataQuerySelector {
   CurrentMonthButton = 'data-current-month-button',
   SelectedMonthSlide = 'data-selected-month-slide',
   Today = 'data-today',
-  Tomorrow = 'data-tomorrow',
 }
 
 export enum TabBarButton {

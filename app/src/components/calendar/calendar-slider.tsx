@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Mousewheel } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper as SwiperType } from 'swiper/types';
 
 import CalendarMonthView from '@components/calendar/calendar-month';
 import CalendarMonthList from '@components/calendar/calendar-month-list';
 import CalendarSliderContainer from '@components/calendar/calendar-slider-container';
 
+import { useMainStore } from '@store/mainStore';
 import { useSwiperStore } from '@store/swiperStore';
 
 import { DataQuerySelector } from '@utils/consts';
@@ -23,7 +25,9 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
   const setSwiper = useSwiperStore((s) => s.setSwiper);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
 
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const { hintForSwiping, hideHintForSwiping } = useMainStore();
+
+  const swiperRef = useRef<SwiperType | null>(null);
 
   const displayIndex = selectedMonthIndex ?? currentMonthIndex;
 
@@ -36,11 +40,48 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
       visibleSlides.push({ month: months[displayIndex + 1], index: displayIndex + 1 });
   }
 
+  // Slide 0 is MonthList, then optionally prev month, then curr month
+  const initialSwiperIndex = displayIndex > 0 ? 2 : 1;
+
+  const hintScroll = (swiper: SwiperType) => {
+    if (!swiper || swiper.destroyed) return;
+
+    if (hintForSwiping) {
+      const initialTranslate = swiper.getTranslate();
+      const shift = initialTranslate - 50;
+
+      swiper.translateTo(shift, 400, false, true);
+
+      setTimeout(() => {
+        if (!swiper || swiper.destroyed) return;
+        swiper.translateTo(initialTranslate, 400, false, true);
+      }, 400);
+      swiper.on('slideChange', hideHintForSwiping);
+    }
+  };
+
+  // First-load: scroll to today and show swipe hint
+  useEffect(() => {
+    const scrollTimer = setTimeout(() => {
+      const swiper = swiperRef.current;
+      if (!swiper || swiper.destroyed) return;
+      swiper.slides[swiper.activeIndex]
+        ?.querySelector(`[${DataQuerySelector.Today}]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        if (swiperRef.current && !swiperRef.current.destroyed) hintScroll(swiperRef.current);
+      }, 1000);
+    }, 100);
+    return () => clearTimeout(scrollTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Swiper
       modules={[Mousewheel]}
       spaceBetween={10}
       slidesPerView={1}
+      initialSlide={initialSwiperIndex}
       className="w-full h-full pt-[4.1875rem]"
       mousewheel={{
         enabled: true,
@@ -48,17 +89,21 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
         releaseOnEdges: true,
         thresholdDelta: 10,
       }}
-      onSwiper={setSwiper}
+      onSwiper={(s) => {
+        setSwiper(s);
+        swiperRef.current = s;
+      }}
       onSlidesUpdated={(swiper) => {
         const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
         if (centerIdx === -1) return;
-
-        if (isFirstLoad) {
-          swiper.slideTo(centerIdx, 0);
-          setIsFirstLoad(false);
-        } else {
-          setTimeout(() => swiper.slideTo(centerIdx, 300), 50);
-        }
+        // slideTo is a no-op if already at centerIdx (initial load), animates otherwise
+        setTimeout(() => swiper.slideTo(centerIdx, 300), 50);
+      }}
+      onSlideChangeTransitionEnd={(swiper) => {
+        // Скролл на первом и последнем слайде до текущей недели
+        swiper.slides[swiper.activeIndex]
+          .querySelector(`[${DataQuerySelector.CurrentMonthButton}]`)
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }}
     >
       {/* Left edge: month list */}
