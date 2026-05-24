@@ -34,9 +34,13 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
     }
   };
 
-  // Group months by year
+  const currentYear = new Date().getFullYear();
+  const visibleYears = new Set([currentYear - 1, currentYear, currentYear + 1]);
+
+  // Group months by year, only for prev/curr/next year
   const byYear = months.reduce<{ year: number; items: { month: CalendarMonth; idx: number }[] }[]>(
     (acc, month, idx) => {
+      if (!visibleYears.has(month.year)) return acc;
       const group = acc.find((g) => g.year === month.year);
       if (group) {
         group.items.push({ month, idx });
