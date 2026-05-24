@@ -20,6 +20,19 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
   const setSelectedMonthIndex = useSwiperStore((s) => s.setSelectedMonthIndex);
   const currMonthIndex = useSwiperStore((s) => s.currMonthIndex);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
+  const swiper = useSwiperStore((s) => s.swiper);
+
+  const handleMonthClick = (idx: number) => {
+    if (idx === selectedMonthIndex) {
+      // Месяц уже выбран — принудительно скользим к нему
+      if (swiper) {
+        const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
+        if (centerIdx !== -1) setTimeout(() => swiper.slideTo(centerIdx, 300), 50);
+      }
+    } else {
+      setSelectedMonthIndex(idx);
+    }
+  };
 
   // Group months by year
   const byYear = months.reduce<{ year: number; items: { month: CalendarMonth; idx: number }[] }[]>(
@@ -63,7 +76,7 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
                   className="!bg-tg-section-bg-color !border-tg-section-bg-color text-tg-text-color !rounded-2xl ps-1 !py-1"
                   addIcon
                   {...(isCurrent && { [DataQuerySelector.CurrentMonthButton]: '' })}
-                  onClick={() => setSelectedMonthIndex(idx)}
+                  onClick={() => handleMonthClick(idx)}
                 >
                   <div className="flex gap-3.5 items-center">
                     <span className="border border-tg-text-color/25 rounded-full size-8 text-sm leading-none pt-[1px] flex justify-center items-center flex-shrink-0">
