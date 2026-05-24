@@ -18,7 +18,7 @@ export function plural(n: number, one: string, few: string, many: string): strin
 }
 
 /**
- * Группирует события по месяцам, сортируя по дате.
+ * Группирует события по месяцам, формируя полный список из 12 месяцев для каждого года.
  */
 export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
   const monthMap = new Map<string, CalendarMonth>();
@@ -33,6 +33,17 @@ export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
       monthMap.set(key, { year, month, events: [] });
     }
     monthMap.get(key)!.events.push(event);
+  });
+
+  // Collect all years present in events and fill in all 12 months for each year
+  const years = new Set(Array.from(monthMap.values()).map((m) => m.year));
+  years.forEach((year) => {
+    for (let month = 1; month <= 12; month++) {
+      const key = `${year}-${String(month).padStart(2, '0')}`;
+      if (!monthMap.has(key)) {
+        monthMap.set(key, { year, month, events: [] });
+      }
+    }
   });
 
   return Array.from(monthMap.values()).sort((a, b) => (a.year !== b.year ? a.year - b.year : a.month - b.month));
