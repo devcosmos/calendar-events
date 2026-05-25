@@ -53,3 +53,9 @@ docker run -p 3000:3000 schedule-frontend
 ## 📄 Лицензия
 
 [MIT](../LICENSE)
+
+## 🎨 Credits
+
+Иконки: [480 Design](https://www.figma.com/community/file/1166831539721848736), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+Иконки: [Font Awesome](https://fontawesome.com), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
