@@ -2,7 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 
-import { Star, User } from '@components/icon/light';
+import { Calendar, CircleUser, Mark } from '@components/icon/bold';
+import { MagnifyingGlass } from '@components/icon/regular';
 import TapBarButton from '@components/tab-bar/tap-bar-button';
 
 import { useTabBarEvents } from '@hooks/tab-bar/useTabBarEvents';
@@ -15,28 +16,37 @@ export default function TabBar() {
   const { pathname, handleNavigationButtonClick } = useTabBarEvents();
 
   return (
-    <div className="flex justify-center p-2 gap-2">
-      <TapBarButton
-        href={AppRoute.Favourites}
-        isActive={pathname === AppRoute.Favourites}
-        title={t(TabBarButton.Favourites)}
-      >
-        <Star className="size-6 mt-0.5" />
-      </TapBarButton>
-      <TapBarButton
-        href={AppRoute.Home}
-        title={t(TabBarButton.Today)}
-        onClick={(event) => handleNavigationButtonClick(event, DataQuerySelector.Today)}
-        isActive={pathname === AppRoute.Home}
-      >
-        <span className="flex items-center justify-center size-9 bg-tg-link-color text-white p-0 rounded-full leading-none text-lg">
-          {new Date().getDate()}
-        </span>
-      </TapBarButton>
+    <div className="flex justify-between p-5 gap-2.5 absolute bottom-0 left-0 right-0 bg-transparent z-10">
+      <div className="bg-tg-section-bg-color/10 flex flex-1 gap-1 p-1 justify-between backdrop-blur-md rounded-full border border-tg-text-color/10 overflow-hidden">
+        <TapBarButton
+          href={AppRoute.Favourites}
+          isActive={pathname === AppRoute.Favourites}
+          title={t(TabBarButton.Favourites)}
+        >
+          <Mark className="size-6" />
+        </TapBarButton>
+        <TapBarButton
+          href={AppRoute.Home}
+          title={t(TabBarButton.Today)}
+          onClick={(event) => handleNavigationButtonClick(event, DataQuerySelector.Today)}
+          isActive={pathname === AppRoute.Home}
+        >
+          <Calendar className="size-6" />
+        </TapBarButton>
 
-      <TapBarButton href={AppRoute.Settings} title={t(TabBarButton.Account)} isActive={pathname === AppRoute.Settings}>
-        <User className="size-6 mt-0.5" />
-      </TapBarButton>
+        <TapBarButton
+          href={AppRoute.Settings}
+          title={t(TabBarButton.Account)}
+          isActive={pathname === AppRoute.Settings}
+        >
+          <CircleUser className="size-6" />
+        </TapBarButton>
+      </div>
+      <div className="bg-tg-section-bg-color/10 flex gap-1 p-1 items-center justify-between backdrop-blur-md rounded-full border border-tg-text-color/10 overflow-hidden">
+        <TapBarButton href={AppRoute.Search} isActive={pathname === AppRoute.Search}>
+          <MagnifyingGlass className="size-6" />
+        </TapBarButton>
+      </div>
     </div>
   );
 }

@@ -19,7 +19,7 @@ body {
   main {
     height: var(--tg-viewport-height, 100dvh);
     min-height: 100dvh;
-    padding-bottom: var(--tg-viewport-safe-area-inset-bottom, 0px);
+    /* padding-bottom: var(--tg-viewport-safe-area-inset-bottom, 0px); */
   }
 }
 
