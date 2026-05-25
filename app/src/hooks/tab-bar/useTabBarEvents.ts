@@ -18,7 +18,7 @@ export const useTabBarEvents = () => {
 
   const handleNavigationButtonClick = (
     event: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>,
-    querySelector: DataQuerySelector.Today | DataQuerySelector.Tomorrow,
+    querySelector: DataQuerySelector.Today,
   ) => {
     if (!swiper) return;
 
