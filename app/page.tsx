@@ -11,7 +11,7 @@ export default async function Page() {
   const currentMonthIndex = getCurrentMonthIndex(months);
 
   return (
-    <PageWrapper title={AppRoute.Home} hideTitle back={false} removePadding>
+    <PageWrapper title={AppRoute.Home} hideTitle back={false} className="px-0">
       <CalendarView months={months} currentMonthIndex={currentMonthIndex} />
     </PageWrapper>
   );
