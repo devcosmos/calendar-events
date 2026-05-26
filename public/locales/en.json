@@ -18,7 +18,7 @@
     "notice": "Please note: changing the language only translates the app interface — event names remain unchanged."
   },
   "/favourites/": {
-    "empty-page-title": "You can now add events to favourites"
+    "empty-page-title": "Add events to favourites to quickly find them here"
   },
   "/search/": {
     "search-placeholder": "Event, location or date",
