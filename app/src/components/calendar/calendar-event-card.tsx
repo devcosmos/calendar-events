@@ -36,7 +36,7 @@ export default function CalendarEventCard({ event, ordinal }: CalendarEventCardP
 
   return (
     <div className="flex gap-1 bg-tg-section-bg-color p-1 rounded-2xl">
-      <span className="border border-tg-text-color/25 rounded-full size-8 text-sm leading-[0.5] pt-[1px] flex justify-center items-center flex-shrink-0 self-start mt-1">
+      <span className="border border-tg-text-color/25 rounded-full size-8 text-sm leading-[0.5] flex justify-center items-center flex-shrink-0 self-start">
         {ordinal}
       </span>
       <div className="p-2 pt-1 flex-grow">
