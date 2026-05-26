@@ -22,11 +22,16 @@ export function plural(n: number, one: string, few: string, many: string): strin
  */
 export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
   const monthMap = new Map<string, CalendarMonth>();
+  const formatter = new Intl.DateTimeFormat('ru-RU', {
+    timeZone: 'Europe/Moscow',
+    year: 'numeric',
+    month: 'numeric',
+  });
 
   events.forEach((event) => {
-    const date = new Date(event.start_date);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
+    const parts = formatter.formatToParts(new Date(event.start_date));
+    const year = parseInt(parts.find((p) => p.type === 'year')!.value);
+    const month = parseInt(parts.find((p) => p.type === 'month')!.value);
     const key = `${year}-${String(month).padStart(2, '0')}`;
 
     if (!monthMap.has(key)) {
