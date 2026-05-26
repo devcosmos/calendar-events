@@ -2,9 +2,7 @@ import type { Config } from 'tailwindcss';
 import { PluginAPI } from 'tailwindcss/types/config';
 
 const config: Config = {
-  content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: {
@@ -27,16 +25,22 @@ const config: Config = {
           'destructive-text-color': 'rgb(var(--tg-theme-destructive-text-color))',
         },
       },
-    },
-    keyframes: {
-      shimmer: {
-        '100%': {
-          transform: 'translateX(100%)',
+      keyframes: {
+        shimmer: {
+          '100%': {
+            transform: 'translateX(100%)',
+          },
         },
-      },
-      scaling: {
-        '0%, 80%, 100%': { transform: 'scale(1)' },
-        '40%': { transform: 'scale(0.7)' },
+        pulse: {
+          '0%, 100%': {
+            opacity: '1',
+          },
+          '50%': { opacity: '0.8' },
+        },
+        scaling: {
+          '0%, 80%, 100%': { transform: 'scale(1)' },
+          '40%': { transform: 'scale(0.7)' },
+        },
       },
     },
   },
@@ -48,6 +52,6 @@ const config: Config = {
       addVariant('scrollbar-thumb', '&::-webkit-scrollbar-thumb');
     },
   ],
-}
+};
 
 export default config;

@@ -1,10 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 
 import ActionButton from '@components/button/action-button';
 import FavouriteButton from '@components/button/favourite-button';
+import { Mark } from '@components/icon/bold';
 
 import { useFavouritesStore } from '@store/favouritesStore';
 
@@ -18,14 +18,9 @@ export default function Favourites() {
   if (favourites.length === 0) {
     return (
       <div className="flex flex-wrap justify-center text-center">
-        <Image
-          className="bg-tg-section-bg-color rounded-full my-14"
-          src="/schedule/images/memoji.png"
-          priority
-          width={180}
-          height={180}
-          alt="Memoji girl"
-        />
+        <div className="bg-tg-section-bg-color rounded-full my-14 size-48 flex items-center justify-center">
+          <Mark className="!size-24 text-tg-link-color animate-pulse" />
+        </div>
         <p className="text-lg whitespace-break-spaces leading-tight mb-7 px-2">{t('empty-page-title')} ⭐</p>
       </div>
     );
