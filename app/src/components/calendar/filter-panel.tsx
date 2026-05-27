@@ -1,5 +1,7 @@
 'use client';
 
+import { clsx } from 'clsx';
+
 import { useFilterStore } from '@store/filterStore';
 
 interface FilterPanelProps {
@@ -14,9 +16,9 @@ export default function FilterPanel({ companies }: FilterPanelProps) {
   const hasActiveFilters = selectedCompanies.length > 0;
 
   return (
-    <div className="flex flex-col gap-4 py-4">
+    <div className="flex flex-col gap-3 py-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-tg-hint-color uppercase tracking-wide">Компании</span>
+        <span className="text-lg mt-1">Компании</span>
         {hasActiveFilters && (
           <button onClick={clearFilters} className="text-xs text-tg-link-color">
             Сбросить
@@ -24,20 +26,21 @@ export default function FilterPanel({ companies }: FilterPanelProps) {
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         {companies.map((company) => {
           const isSelected = selectedCompanies.includes(company);
           return (
             <button
               key={company}
               onClick={() => toggleCompany(company)}
-              className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
+              className={clsx(
+                'px-3 py-1.5 rounded-full text-sm border text-nowrap transition-colors',
                 isSelected
                   ? 'bg-tg-button-color text-tg-button-text-color border-tg-button-color'
-                  : 'bg-tg-section-bg-color text-tg-text-color border-tg-text-color/10'
-              }`}
+                  : 'bg-tg-section-bg-color text-tg-text-color border-tg-text-color/10',
+              )}
             >
-              {company}
+              <span className="mt-px block">{company}</span>
             </button>
           );
         })}

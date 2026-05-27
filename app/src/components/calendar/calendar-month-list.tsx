@@ -56,7 +56,7 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
     <div className="flex flex-col">
       {byYear.map(({ year, items }) => (
         <div key={year}>
-          <h3 className="mb-3 pt-1 mt-2 flex justify-between items-center">
+          <h3 className="mt-4 mb-3 flex justify-between items-center">
             <span>{year}</span>
             <span className="text-tg-hint-color font-normal">
               {plural(

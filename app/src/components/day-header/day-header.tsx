@@ -36,7 +36,7 @@ export default function DayHeader({
         {...((isToday || isNearest || isTomorrow) && {
           [DataQuerySelector.Today]: '',
         })}
-        className={clsx('grid mb-3 pt-1 mt-2', isToday || isTomorrow || isNearest ? 'grid-cols-4' : 'grid-cols-2')}
+        className={clsx('grid mb-3 mt-2.5', isToday || isTomorrow || isNearest ? 'grid-cols-4' : 'grid-cols-2')}
       >
         {children}
         <span>
