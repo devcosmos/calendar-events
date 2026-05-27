@@ -8,6 +8,8 @@ import CalendarEmptyEvent from '@components/calendar/calendar-empty-event';
 import CalendarEventCard from '@components/calendar/calendar-event-card';
 import DayHeader from '@components/day-header/day-header';
 
+import { useFilterStore } from '@store/filterStore';
+
 import { CalendarMonth, SwimEvent } from '@utils/types';
 
 interface CalendarMonthViewProps {
@@ -36,8 +38,14 @@ function groupByDay(events: SwimEvent[]): DayGroup[] {
 
 export default function CalendarMonthView({ month }: CalendarMonthViewProps) {
   const t = useTranslations('calendar');
+  const selectedCompanies = useFilterStore((s) => s.selectedCompanies);
 
-  if (month.events.length === 0) {
+  const filteredEvents =
+    selectedCompanies.length > 0
+      ? month.events.filter((e) => e.company !== null && selectedCompanies.includes(e.company))
+      : month.events;
+
+  if (filteredEvents.length === 0) {
     return (
       <div className="py-3">
         <CalendarEmptyEvent title={t('empty-month')} />
@@ -45,7 +53,7 @@ export default function CalendarMonthView({ month }: CalendarMonthViewProps) {
     );
   }
 
-  const dayGroups = groupByDay(month.events);
+  const dayGroups = groupByDay(filteredEvents);
   const today = startOfDay(new Date());
   const nearestDayIndex = dayGroups.findIndex((g) => !isBefore(g.date, today));
 

@@ -9,6 +9,7 @@ import { Swiper as SwiperType } from 'swiper/types';
 import CalendarMonthView from '@components/calendar/calendar-month';
 import CalendarMonthList from '@components/calendar/calendar-month-list';
 import CalendarSliderContainer from '@components/calendar/calendar-slider-container';
+import FilterPanel from '@components/calendar/filter-panel';
 
 import { useMainStore } from '@store/mainStore';
 import { useSwiperStore } from '@store/swiperStore';
@@ -30,6 +31,18 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
   const swiperRef = useRef<SwiperType | null>(null);
 
   const displayIndex = selectedMonthIndex ?? currentMonthIndex;
+
+  const companyCountMap = months
+    .flatMap((m) => m.events)
+    .reduce<Record<string, number>>((acc, e) => {
+      if (e.company) acc[e.company] = (acc[e.company] ?? 0) + 1;
+      return acc;
+    }, {});
+
+  const allCompanies = Object.entries(companyCountMap)
+    .filter(([, count]) => count >= 10)
+    .map(([company]) => company)
+    .sort();
 
   // Only render prev/curr/next months
   const visibleSlides: { month: CalendarMonth; index: number }[] = [];
@@ -126,10 +139,10 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
         </SwiperSlide>
       ))}
 
-      {/* Right edge: month list */}
+      {/* Right edge: filter panel */}
       <SwiperSlide className="h-auto">
         <CalendarSliderContainer>
-          <CalendarMonthList months={months} />
+          <FilterPanel companies={allCompanies} />
         </CalendarSliderContainer>
       </SwiperSlide>
     </Swiper>

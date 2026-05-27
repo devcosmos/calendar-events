@@ -8,8 +8,10 @@ import { ru } from 'date-fns/locale';
 import Button from '@components/button/button';
 import { Filter } from '@components/icon/bold';
 
+import { useFilterStore } from '@store/filterStore';
 import { useSwiperStore } from '@store/swiperStore';
 
+import { DataQuerySelector } from '@utils/consts';
 import { CalendarMonth } from '@utils/types';
 
 interface CalendarHeaderProps {
@@ -21,6 +23,37 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
   const currMonthIndex = useSwiperStore((s) => s.currMonthIndex);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const hasActiveFilters = useFilterStore((s) => s.selectedCompanies.length > 0);
+
+  const slideToCenterMonth = () => {
+    if (!swiper) return;
+
+    const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
+    swiper.slideTo(centerIdx !== -1 ? centerIdx : 1);
+  };
+
+  const handleMonthButtonClick = () => {
+    if (!swiper) return;
+
+    if (activeIndex === 0) {
+      slideToCenterMonth();
+    } else {
+      swiper.slideTo(0);
+    }
+  };
+
+  const handleFilterButtonClick = () => {
+    if (!swiper) return;
+
+    const lastIdx = swiper.slides.length - 1;
+
+    if (activeIndex === lastIdx) {
+      slideToCenterMonth();
+    } else {
+      swiper.slideTo(lastIdx);
+    }
+  };
 
   useEffect(() => {
     if (!swiper) return;
@@ -55,17 +88,21 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
     <div className="absolute top-0 left-0 right-0 z-10 w-full bg-gradient-to-b from-tg-secondary-bg-color/75 to-transparent">
       <div className="flex justify-between items-center gap-2 w-full my-2 px-3">
         <Button
-          onClick={() => swiper?.slideTo(0)}
+          onClick={handleMonthButtonClick}
           className="bg-tg-section-bg-color/10 !w-auto backdrop-blur-md !rounded-full h-12 border border-tg-text-color/10 overflow-hidden !leading-none capitalize text-nowrap"
         >
           {monthName}
         </Button>
 
-        <div>
-          <Button className="bg-tg-section-bg-color/10 backdrop-blur-md !p-0 !size-12 !rounded-full border border-tg-text-color/10 overflow-hidden">
-            <Filter className="size-6" />
-          </Button>
-        </div>
+        <Button
+          onClick={handleFilterButtonClick}
+          className="relative bg-tg-section-bg-color/10 backdrop-blur-md !p-0 !size-12 !rounded-full border border-tg-text-color/10"
+        >
+          <Filter className="size-6 mt-1" />
+          {hasActiveFilters && (
+            <span className="absolute top-0.5 right-0.5 size-2.5 rounded-full bg-tg-button-color border border-tg-bg-color" />
+          )}
+        </Button>
       </div>
     </div>
   );
