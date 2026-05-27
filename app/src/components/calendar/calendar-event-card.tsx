@@ -1,7 +1,10 @@
 'use client';
 
+import clsx from 'clsx';
 import { format } from 'date-fns';
 import { enUS, ru } from 'date-fns/locale';
+
+import FavouriteButton from '@components/button/favourite-button';
 
 import { Locale } from '@core/i18n/config';
 
@@ -33,14 +36,24 @@ export default function CalendarEventCard({ event, ordinal }: CalendarEventCardP
   const { locale } = useMainStore();
   const dateStr = formatDateRange(event.start_date, event.end_date, locale);
   const locationText = [event.location.city, event.location.reservoir].filter(Boolean).join(', ');
+  const isEventPassed = new Date(event.end_date) < new Date();
+  const isEventNow = new Date(event.start_date) <= new Date() && new Date() < new Date(event.end_date);
 
   return (
-    <div className="flex gap-1 bg-tg-section-bg-color p-1 rounded-2xl">
-      <span className="border border-tg-text-color/25 rounded-full size-8 text-sm leading-[0.5] flex justify-center items-center flex-shrink-0 self-start">
-        {ordinal}
-      </span>
+    <div className="flex gap-1 bg-tg-section-bg-color p-1 rounded-2xl overflow-hidden">
+      <div className="flex flex-col items-center justify-between">
+        <span
+          className={clsx(
+            'border rounded-full size-8 text-sm leading-[0.5] flex justify-center items-center flex-shrink-0 self-start',
+            isEventNow ? 'border-orange-500' : 'border-tg-text-color/25',
+          )}
+        >
+          {ordinal}
+        </span>
+        <FavouriteButton SwimEvent={event} />
+      </div>
       <div className="p-2 pt-1 flex-grow">
-        <h3 className="text-lg leading-tight mb-2">{event.name}</h3>
+        <h3 className={clsx('text-lg leading-tight mb-2', isEventPassed && 'text-tg-hint-color')}>{event.name}</h3>
         {event.location.map_url ? (
           <a
             href={event.location.map_url}
