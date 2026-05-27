@@ -4,7 +4,7 @@
     "/calendar/": "Календарь",
     "/settings/": "Аккаунт",
     "/settings/language/": "Выбор\u00A0языка",
-    "/favourites/": "Избранное",
+    "/favourites/": "Избранные события",
     "/search/": "Поиск",
     "/not-found/": "Страница не\u00A0найдена"
   },
@@ -31,7 +31,7 @@
   },
   "tab-bar": {
     "today": "Сегодня",
-    "favourites": "Избранное",
+    "favourites": "Избранные",
     "account": "Аккаунт",
     "calendar": "События",
     "popup-title": "Скоро тут что-то будет 🪄",

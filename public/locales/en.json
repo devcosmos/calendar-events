@@ -4,7 +4,7 @@
     "/calendar/": "Calendar",
     "/settings/": "Account",
     "/settings/language/": "Language",
-    "/favourites/": "Favourites",
+    "/favourites/": "Favourites events",
     "/search/": "Search",
     "/not-found/": "Page not found"
   },
