@@ -27,9 +27,9 @@ export default function TapBarButton({
       href={href}
       onMouseDown={() => postEvent('web_app_trigger_haptic_feedback', { type: 'selection_change' })}
       className={clsx(
-        'min-w-14 h-14 relative rounded-full pb-1.5 p-1',
+        'min-w-14 h-14 relative rounded-full pb-2 p-1',
         'flex flex-1 flex-col items-center justify-center gap-1.5',
-        'text-xs leading-none font-normal',
+        'text-[11px] leading-none font-normal',
         'transition-transform duration-200 ease-in-out',
         'group active:scale-95',
         isDisabled && 'opacity-25',
