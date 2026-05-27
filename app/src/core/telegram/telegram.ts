@@ -70,6 +70,8 @@ export default function TelegramSDK() {
     // console.log('Начинаем монтировать viewport...');
     viewport.mount();
     viewport.bindCssVars();
+    // Разворачиваем миниапп на fullsize при открытии
+    viewport.expand?.();
     // console.log('Viewport смонтирован');
 
     // Восстанавливаем данные инициализации
