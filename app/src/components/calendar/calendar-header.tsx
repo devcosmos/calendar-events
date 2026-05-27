@@ -52,7 +52,7 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
     : '';
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-10 w-full">
+    <div className="absolute top-0 left-0 right-0 z-10 w-full bg-gradient-to-b from-tg-secondary-bg-color/75 to-transparent">
       <div className="flex justify-between items-center gap-2 w-full my-2 px-3">
         <Button
           onClick={() => swiper?.slideTo(0)}

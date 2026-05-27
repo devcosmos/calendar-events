@@ -15,7 +15,7 @@ export default function TabBar() {
   const { pathname, handleNavigationButtonClick } = useTabBarEvents();
 
   return (
-    <div className="flex justify-between p-5 gap-2.5 fixed bottom-0 left-0 right-0 bg-transparent z-10">
+    <div className="flex justify-between p-5 pt-0 gap-2.5 fixed bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-tg-secondary-bg-color/75 to-transparent">
       <div className="bg-tg-section-bg-color/10 flex flex-1 gap-1 p-1 justify-between backdrop-blur-md rounded-full border border-tg-text-color/10 overflow-hidden">
         <TapBarButton
           href={AppRoute.Favourites}
