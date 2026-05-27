@@ -44,6 +44,6 @@ export enum DataQuerySelector {
 
 export enum TabBarButton {
   Favourites = 'favourites',
-  Today = 'today',
+  Calendar = 'calendar',
   Account = 'account',
 }

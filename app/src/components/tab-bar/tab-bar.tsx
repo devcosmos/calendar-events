@@ -26,7 +26,7 @@ export default function TabBar() {
         </TapBarButton>
         <TapBarButton
           href={AppRoute.Home}
-          title={t(TabBarButton.Today)}
+          title={t(TabBarButton.Calendar)}
           onClick={(event) => handleNavigationButtonClick(event, DataQuerySelector.Today)}
           isActive={pathname === AppRoute.Home}
         >
