@@ -2,8 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
-import { Calendar, CircleUser, Mark } from '@components/icon/bold';
-import { MagnifyingGlass } from '@components/icon/regular';
+import { Calendar, CircleUser, Magnifier, Mark } from '@components/icon/bold';
 import TapBarButton from '@components/tab-bar/tap-bar-button';
 
 import { useTabBarEvents } from '@hooks/tab-bar/useTabBarEvents';
@@ -44,7 +43,7 @@ export default function TabBar() {
       </div>
       <div className="bg-tg-section-bg-color/10 flex gap-1 p-1 items-center justify-between backdrop-blur-md rounded-full border border-tg-text-color/10 overflow-hidden">
         <TapBarButton href={AppRoute.Search} isActive={pathname === AppRoute.Search}>
-          <MagnifyingGlass className="size-6" />
+          <Magnifier className="size-7 text-white" />
         </TapBarButton>
       </div>
     </div>
