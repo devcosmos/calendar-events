@@ -3,7 +3,6 @@ import IconWrapper from '@components/icon/icon-wrapper';
 export default function Calendar({ ...rest }: React.SVGAttributes<SVGElement>) {
   return (
     <IconWrapper width="24" height="25" {...rest}>
-      <path d="M0 0h24v24H0z" fill="none" />
       <path
         fill="currentColor"
         d="M7.75 2.5a.75.75 0 0 0-1.5 0v1.58c-1.44.115-2.384.397-3.078 1.092c-.695.694-.977 1.639-1.093 3.078h19.842c-.116-1.44-.398-2.384-1.093-3.078c-.694-.695-1.639-.977-3.078-1.093V2.5a.75.75 0 0 0-1.5 0v1.513C15.585 4 14.839 4 14 4h-4c-.839 0-1.585 0-2.25.013z"
