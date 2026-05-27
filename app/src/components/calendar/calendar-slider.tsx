@@ -82,7 +82,7 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
       spaceBetween={10}
       slidesPerView={1}
       initialSlide={initialSwiperIndex}
-      className="w-full h-full pt-[4.1875rem]"
+      className="w-full h-full"
       mousewheel={{
         enabled: true,
         forceToAxis: true,

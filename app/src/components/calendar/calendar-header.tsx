@@ -6,11 +6,10 @@ import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import Button from '@components/button/button';
-import { MagnifyingGlass } from '@components/icon/regular';
+import { Filter } from '@components/icon/bold';
 
 import { useSwiperStore } from '@store/swiperStore';
 
-import { AppRoute } from '@utils/consts';
 import { CalendarMonth } from '@utils/types';
 
 interface CalendarHeaderProps {
@@ -53,22 +52,20 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
     : '';
 
   return (
-    <div className="absolute top-0 left-0 right-0 bg-tg-secondary-bg-color z-10 w-full">
+    <div className="absolute top-0 left-0 right-0 z-10 w-full">
       <div className="flex justify-between items-center gap-2 w-full my-2 px-3">
-        <div className="flex justify-between items-center gap-2 overflow-hidden">
-          <Button
-            href={AppRoute.Search}
-            className="bg-tg-section-bg-color border-tg-section-bg-color text-sm !rounded-2xl !w-auto !p-3.5"
-          >
-            <MagnifyingGlass className="!fill-tg-link-color" />
-          </Button>
-        </div>
         <Button
           onClick={() => swiper?.slideTo(0)}
-          className="bg-tg-section-bg-color border-tg-section-bg-color capitalize !text-sm text-tg-link-color !py-3.5 !rounded-2xl !w-auto text-nowrap"
+          className="bg-tg-section-bg-color/10 !w-auto backdrop-blur-md !rounded-full h-12 border border-tg-text-color/10 overflow-hidden !leading-none capitalize text-nowrap"
         >
           {monthName}
         </Button>
+
+        <div>
+          <Button className="bg-tg-section-bg-color/10 backdrop-blur-md !p-0 !size-12 !rounded-full border border-tg-text-color/10 overflow-hidden">
+            <Filter className="size-6" />
+          </Button>
+        </div>
       </div>
     </div>
   );
