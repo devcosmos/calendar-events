@@ -9,7 +9,7 @@ import { Swiper as SwiperType } from 'swiper/types';
 import CalendarMonthView from '@components/calendar/calendar-month';
 import CalendarMonthList from '@components/calendar/calendar-month-list';
 import CalendarSliderContainer from '@components/calendar/calendar-slider-container';
-import FilterPanel from '@components/calendar/filter-panel';
+import { FilterPanel } from '@components/filter';
 
 import { useMainStore } from '@store/mainStore';
 import { useSwiperStore } from '@store/swiperStore';
@@ -23,7 +23,7 @@ interface CalendarSliderProps {
   currentMonthIndex: number;
   companies: string[];
   cities: string[];
-  reservoirTypes: Array<{ id: ReservoirType; label: string }>;
+  reservoirTypes: { id: ReservoirType; label: string }[];
 }
 
 export default function CalendarSlider({
