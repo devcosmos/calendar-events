@@ -4,7 +4,7 @@ import { postEvent } from '@tma.js/sdk-react';
 import clsx from 'clsx';
 
 import Button from '@components/button/button';
-import { MarkOutline } from '@components/icon/bold';
+import { Mark } from '@components/icon/outline';
 
 import { useFavouritesStore } from '@store/favouritesStore';
 
@@ -55,9 +55,7 @@ export default function FavouriteButton({ SwimEvent, size = ButtonSize.Base }: F
       onClick={handleFavouriteButtonClick}
     >
       <span ref={starRef} className="origin-center will-change-transform -ms-px">
-        <MarkOutline
-          className={clsx('group', size === ButtonSize.Medium && 'size-6', isFavouriteEntity && 'scaling')}
-        />
+        <Mark className={clsx('group', size === ButtonSize.Medium && 'size-6', isFavouriteEntity && 'scaling')} />
       </span>
     </Button>
   );

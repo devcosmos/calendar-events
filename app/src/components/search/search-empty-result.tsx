@@ -1,4 +1,4 @@
-import { Ufo } from '@components/icon/light';
+import { Ufo } from '@components/icon/outline';
 
 export default function SearchEmptyResult({
   title,

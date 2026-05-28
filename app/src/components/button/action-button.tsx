@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Switch } from '@headlessui/react';
 import clsx from 'clsx';
 
-import { ChevronRight } from '@components/icon/regular';
+import { ArrowRight } from '@components/icon/outline';
 
 interface ActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string; // Левый заголовок
@@ -42,7 +42,7 @@ export default function ActionButton({
       {value ? (
         <span className="text-tg-link-color text-end whitespace-nowrap">{value}</span>
       ) : (
-        <ChevronRight className={clsx('!size-5 -me-1.5 fill-tg-button-text-color')} />
+        <ArrowRight className={clsx('!size-5 -me-1.5 fill-tg-button-text-color')} />
       )}
     </>
   );

@@ -1,8 +1,8 @@
 import IconWrapper from '@components/icon/icon-wrapper';
 
-export default function Mark({ ...rest }: React.SVGAttributes<SVGElement>) {
+export function Mark({ ...rest }: React.SVGAttributes<SVGElement>) {
   return (
-    <IconWrapper width="24" height="24" {...rest}>
+    <IconWrapper {...rest}>
       <path
         fill="currentColor"
         fillRule="evenodd"

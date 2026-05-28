@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { ComboboxOption } from '@headlessui/react';
 import clsx from 'clsx';
 
-import { ChevronRight, ClockRotateLeft, MagnifyingGlass, Xmark } from '@components/icon/regular';
+import { ArrowRight, Close, History, Magnifier } from '@components/icon/outline';
 
 import { useFavouritesStore } from '@store/favouritesStore';
 
@@ -43,19 +43,15 @@ export default function SearchOption({
       >
         {isSearchPage && (
           <div className="w-7 flex-shrink-0">
-            {isEmptyQuery ? (
-              <ClockRotateLeft className="!size-4 opacity-50" />
-            ) : (
-              <MagnifyingGlass className="!size-4 opacity-50" />
-            )}
+            {isEmptyQuery ? <History className="!size-4 opacity-50" /> : <Magnifier className="!size-4 opacity-50" />}
           </div>
         )}
         <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">{entity.name}</span>
-        {!isEmptyQuery && <ChevronRight className="!size-4" />}
+        {!isEmptyQuery && <ArrowRight className="!size-4" />}
       </ComboboxOption>
       {isEmptyQuery && isSearchPage && (
         <button className="bg-transparent border-0 p-3 flex-shrink-0" onClick={() => removeSearchHistoryItem(entity)}>
-          <Xmark className="!size-4" />
+          <Close className="!size-4" />
         </button>
       )}
       <div

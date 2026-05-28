@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import clsx from 'clsx';
 
-import { Calendar } from '@components/icon/regular';
+import { Calendar } from '@components/icon/bold';
 
 interface ExportCalendarButtonProps {
   group?: string;

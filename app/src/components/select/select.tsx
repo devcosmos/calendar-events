@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { ChevronDown } from '@components/icon/regular';
+import { ArrowDown } from '@components/icon/outline';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   placeholder?: string;
@@ -26,7 +26,7 @@ export default function Select({ placeholder, children, ...rest }: SelectProps) 
         )}
         {children}
       </select>
-      <ChevronDown
+      <ArrowDown
         className={clsx(
           'pointer-events-none absolute top-3 right-3 size-5 transition-all',
           rest.value ? 'fill-tg-text-color' : 'fill-tg-section-header-text-color',

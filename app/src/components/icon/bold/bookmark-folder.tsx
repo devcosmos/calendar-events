@@ -1,8 +1,8 @@
 import IconWrapper from '@components/icon/icon-wrapper';
 
-export default function Calendar({ ...rest }: React.SVGAttributes<SVGElement>) {
+export function BookmarkFolder({ ...rest }: React.SVGAttributes<SVGElement>) {
   return (
-    <IconWrapper width="24" height="24" {...rest}>
+    <IconWrapper {...rest}>
       <path
         fill="currentColor"
         d="M14.75 5.75h1.452q.562 0 1.048.002v4.867l-.705-.394l-.009-.005a2 2 0 0 0-.16-.082a.9.9 0 0 0-.376-.082a.9.9 0 0 0-.377.082c-.062.027-.125.063-.16.082l-.008.005l-.705.394z"

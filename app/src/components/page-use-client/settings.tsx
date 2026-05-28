@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { postEvent } from '@tma.js/sdk-react';
 
 import ActionButton from '@components/button/action-button';
-import { Eyes, Globe, Headset } from '@components/icon/light';
+import { EyeClosed, Globe, Help } from '@components/icon/outline';
 
 import { useMainStore } from '@store/mainStore';
 
@@ -33,10 +33,10 @@ export default function Settings() {
         <Globe className="size-6 opacity-50" />
       </ActionButton>
       <ActionButton title={t('hide-empty-days')} enabled={hideEmptyDays} setEnabled={setHideEmptyDays}>
-        <Eyes className="size-6 opacity-50" />
+        <EyeClosed className="size-6 opacity-50" />
       </ActionButton>
       <ActionButton onClick={handleSupportClick} title={t('contact-support')}>
-        <Headset className="size-6 opacity-50" />
+        <Help className="size-6 opacity-50" />
       </ActionButton>
     </div>
   );

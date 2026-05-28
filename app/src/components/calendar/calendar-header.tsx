@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import Button from '@components/button/button';
-import { Filter } from '@components/icon/bold';
+import { Filter } from '@components/icon/outline';
 
 import { selectHasActiveFilters, useFilterStore } from '@store/filterStore';
 import { useSwiperStore } from '@store/swiperStore';

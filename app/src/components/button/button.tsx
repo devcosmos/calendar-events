@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import clsx from 'clsx';
 
-import { ChevronRight } from '@components/icon/regular';
+import { ArrowRight } from '@components/icon/outline';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string; // Если передан href — рендерим ссылку
@@ -33,7 +33,7 @@ export default function Button({
     <>
       {children}
       {addIcon && (
-        <ChevronRight
+        <ArrowRight
           className={clsx('!size-4 -me-1.5', outline ? '!fill-tg-link-color' : '!fill-tg-button-text-color')}
         />
       )}

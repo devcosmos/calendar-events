@@ -1,9 +1,8 @@
 import IconWrapper from '@components/icon/icon-wrapper';
 
-export default function MarkOutline({ ...rest }: React.SVGAttributes<SVGElement>) {
+export function Mark({ ...rest }: React.SVGAttributes<SVGElement>) {
   return (
-    <IconWrapper width="24" height="24" {...rest}>
-      {/* <path d="M0 0h24v24H0z" fill="none" /> */}
+    <IconWrapper {...rest}>
       <g strokeWidth="1.5">
         <path
           className="stroke-tg-link-color fill-transparent transition-all duration-300 group-[.scaling]:fill-tg-link-color"
