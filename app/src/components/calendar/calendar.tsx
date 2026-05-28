@@ -50,7 +50,7 @@ export default function CalendarView({ months, currentMonthIndex }: CalendarView
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ru'))
       .map(([city]) => city);
 
-    const reservoirTypes: Array<{ id: ReservoirType; label: string }> = [];
+    const reservoirTypes: { id: ReservoirType; label: string }[] = [];
     const reservoirCountMap = months
       .flatMap((m) => m.events)
       .reduce<Record<string, number>>((acc, e) => {
