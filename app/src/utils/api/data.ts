@@ -34,7 +34,22 @@ export async function fetchFromUrl<T>(url: string): Promise<T | null> {
 
 export const getCachedEvents = unstable_cache(
   async (): Promise<SwimEvent[] | null> => {
-    return eventsJson as SwimEvent[];
+    const allEvents = eventsJson as SwimEvent[];
+    const yearFormatter = new Intl.DateTimeFormat('ru-RU', {
+      timeZone: 'Europe/Moscow',
+      year: 'numeric',
+    });
+
+    const currentYear = Number.parseInt(yearFormatter.format(new Date()), 10);
+    const minYear = currentYear - 1;
+    const maxYear = currentYear + 1;
+
+    return allEvents
+      .filter((event) => {
+        const eventYear = Number.parseInt(yearFormatter.format(new Date(event.start_date)), 10);
+        return Number.isFinite(eventYear) && eventYear >= minYear && eventYear <= maxYear;
+      })
+      .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
   },
   ['events'],
   { revalidate: 3_600 * 24 },

@@ -44,6 +44,19 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
     .map(([company]) => company)
     .sort();
 
+  const cityCountMap = months
+    .flatMap((m) => m.events)
+    .reduce<Record<string, number>>((acc, e) => {
+      const city = e.location.city?.trim();
+      if (city) acc[city] = (acc[city] ?? 0) + 1;
+      return acc;
+    }, {});
+
+  const allCities = Object.entries(cityCountMap)
+    .filter(([, count]) => count > 2)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ru'))
+    .map(([city]) => city);
+
   // Only render prev/curr/next months
   const visibleSlides: { month: CalendarMonth; index: number }[] = [];
   if (months.length > 0) {
@@ -142,7 +155,7 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
       {/* Right edge: filter panel */}
       <SwiperSlide className="h-auto">
         <CalendarSliderContainer>
-          <FilterPanel companies={allCompanies} />
+          <FilterPanel companies={allCompanies} cities={allCities} />
         </CalendarSliderContainer>
       </SwiperSlide>
     </Swiper>

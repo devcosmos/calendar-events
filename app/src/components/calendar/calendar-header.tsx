@@ -24,7 +24,8 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  const hasActiveFilters = useFilterStore((s) => s.selectedCompanies.length > 0);
+  const hasActiveFilters = useFilterStore((s) => s.selectedCompanies.length > 0 || s.selectedCities.length > 0);
+  const clearFilters = useFilterStore((s) => s.clearFilters);
 
   const slideToCenterMonth = () => {
     if (!swiper) return;
@@ -94,15 +95,26 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
           {monthName}
         </Button>
 
-        <Button
-          onClick={handleFilterButtonClick}
-          className="relative bg-tg-section-bg-color/10 backdrop-blur-md !p-0 !size-12 !rounded-full border border-tg-text-color/10"
-        >
-          <Filter className="size-6 mt-1" />
+        <div className="flex items-center gap-2">
           {hasActiveFilters && (
-            <span className="absolute top-0.5 right-0.5 size-2.5 rounded-full bg-tg-button-color border border-tg-bg-color" />
+            <Button
+              onClick={clearFilters}
+              className="bg-tg-section-bg-color/10 !w-auto backdrop-blur-md !rounded-full h-8 !py-1 !px-3 text-sm border border-tg-text-color/10 overflow-hidden !leading-none text-nowrap"
+            >
+              Сбросить
+            </Button>
           )}
-        </Button>
+
+          <Button
+            onClick={handleFilterButtonClick}
+            className="relative bg-tg-section-bg-color/10 backdrop-blur-md !p-0 !size-12 !rounded-full border border-tg-text-color/10"
+          >
+            <Filter className="size-6 mt-1" />
+            {hasActiveFilters && (
+              <span className="absolute top-0.5 right-0.5 size-2.5 rounded-full bg-tg-button-color border border-tg-bg-color" />
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );

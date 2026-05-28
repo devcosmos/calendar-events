@@ -6,6 +6,7 @@ import { ru } from 'date-fns/locale';
 
 import Button from '@components/button/button';
 
+import { useFilterStore } from '@store/filterStore';
 import { useSwiperStore } from '@store/swiperStore';
 
 import { plural } from '@utils/calendarHelper';
@@ -21,6 +22,8 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
   const currMonthIndex = useSwiperStore((s) => s.currMonthIndex);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
   const swiper = useSwiperStore((s) => s.swiper);
+  const selectedCompanies = useFilterStore((s) => s.selectedCompanies);
+  const selectedCities = useFilterStore((s) => s.selectedCities);
 
   const handleMonthClick = (idx: number) => {
     if (idx === selectedMonthIndex) {
@@ -34,13 +37,18 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
     }
   };
 
-  const currentYear = new Date().getFullYear();
-  const visibleYears = new Set([currentYear - 1, currentYear, currentYear + 1]);
+  const getFilteredEventCount = (events: (typeof months)[0]['events']) => {
+    return events.filter((e) => {
+      const companyMatches =
+        selectedCompanies.length === 0 || (e.company !== null && selectedCompanies.includes(e.company));
+      const cityMatches = selectedCities.length === 0 || selectedCities.includes(e.location.city);
+      return companyMatches && cityMatches;
+    }).length;
+  };
 
-  // Group months by year, only for prev/curr/next year
+  // Group months by year
   const byYear = months.reduce<{ year: number; items: { month: CalendarMonth; idx: number }[] }[]>(
     (acc, month, idx) => {
-      if (!visibleYears.has(month.year)) return acc;
       const group = acc.find((g) => g.year === month.year);
       if (group) {
         group.items.push({ month, idx });
@@ -60,7 +68,7 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
             <span>{year}</span>
             <span className="text-tg-hint-color font-normal">
               {plural(
-                items.reduce((sum, { month }) => sum + month.events.length, 0),
+                items.reduce((sum, { month }) => sum + getFilteredEventCount(month.events), 0),
                 'событие',
                 'события',
                 'событий',
@@ -95,9 +103,14 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
                       )}
                     >
                       {label}
-                      {month.events.length > 0 && (
-                        <span className="text-base opacity-50">&nbsp;&mdash;&nbsp;{month.events.length}</span>
-                      )}
+                      {(() => {
+                        const filteredCount = getFilteredEventCount(month.events);
+                        return (
+                          filteredCount > 0 && (
+                            <span className="text-base opacity-50">&nbsp;&mdash;&nbsp;{filteredCount}</span>
+                          )
+                        );
+                      })()}
                     </span>
                   </div>
                 </Button>

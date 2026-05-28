@@ -39,11 +39,14 @@ function groupByDay(events: SwimEvent[]): DayGroup[] {
 export default function CalendarMonthView({ month }: CalendarMonthViewProps) {
   const t = useTranslations('calendar');
   const selectedCompanies = useFilterStore((s) => s.selectedCompanies);
+  const selectedCities = useFilterStore((s) => s.selectedCities);
 
-  const filteredEvents =
-    selectedCompanies.length > 0
-      ? month.events.filter((e) => e.company !== null && selectedCompanies.includes(e.company))
-      : month.events;
+  const filteredEvents = month.events.filter((e) => {
+    const companyMatches =
+      selectedCompanies.length === 0 || (e.company !== null && selectedCompanies.includes(e.company));
+    const cityMatches = selectedCities.length === 0 || selectedCities.includes(e.location.city);
+    return companyMatches && cityMatches;
+  });
 
   if (filteredEvents.length === 0) {
     return (
