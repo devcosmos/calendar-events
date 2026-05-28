@@ -57,6 +57,18 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ru'))
     .map(([city]) => city);
 
+  const reservoirTypes: Array<{ id: string; label: string }> = [];
+  const reservoirCountMap = months
+    .flatMap((m) => m.events)
+    .reduce<Record<string, number>>((acc, e) => {
+      const type = e.location.reservoir === 'Бассейн' ? 'pool' : 'openwater';
+      acc[type] = (acc[type] ?? 0) + 1;
+      return acc;
+    }, {});
+
+  if (reservoirCountMap['pool']) reservoirTypes.push({ id: 'pool', label: 'Бассейн' });
+  if (reservoirCountMap['openwater']) reservoirTypes.push({ id: 'openwater', label: 'Открытая вода' });
+
   // Only render prev/curr/next months
   const visibleSlides: { month: CalendarMonth; index: number }[] = [];
   if (months.length > 0) {
@@ -155,7 +167,7 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
       {/* Right edge: filter panel */}
       <SwiperSlide className="h-auto">
         <CalendarSliderContainer>
-          <FilterPanel companies={allCompanies} cities={allCities} />
+          <FilterPanel companies={allCompanies} cities={allCities} reservoirTypes={reservoirTypes} />
         </CalendarSliderContainer>
       </SwiperSlide>
     </Swiper>

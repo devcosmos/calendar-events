@@ -24,7 +24,7 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  const hasActiveFilters = useFilterStore((s) => s.selectedCompanies.length > 0 || s.selectedCities.length > 0);
+  const hasActiveFilters = useFilterStore((s) => s.selectedCompanies.length > 0 || s.selectedCities.length > 0 || s.selectedReservoirTypes.length > 0);
   const clearFilters = useFilterStore((s) => s.clearFilters);
 
   const slideToCenterMonth = () => {

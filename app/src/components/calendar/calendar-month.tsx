@@ -40,12 +40,15 @@ export default function CalendarMonthView({ month }: CalendarMonthViewProps) {
   const t = useTranslations('calendar');
   const selectedCompanies = useFilterStore((s) => s.selectedCompanies);
   const selectedCities = useFilterStore((s) => s.selectedCities);
+  const selectedReservoirTypes = useFilterStore((s) => s.selectedReservoirTypes);
 
   const filteredEvents = month.events.filter((e) => {
     const companyMatches =
       selectedCompanies.length === 0 || (e.company !== null && selectedCompanies.includes(e.company));
     const cityMatches = selectedCities.length === 0 || selectedCities.includes(e.location.city);
-    return companyMatches && cityMatches;
+    const reservoirType = e.location.reservoir === 'Бассейн' ? 'pool' : 'openwater';
+    const reservoirMatches = selectedReservoirTypes.length === 0 || selectedReservoirTypes.includes(reservoirType);
+    return companyMatches && cityMatches && reservoirMatches;
   });
 
   if (filteredEvents.length === 0) {
