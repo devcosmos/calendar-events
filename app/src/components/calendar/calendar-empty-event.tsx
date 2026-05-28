@@ -1,11 +1,14 @@
+import { Ufo } from '@components/icon/outline';
+
 export default function CalendarEmptyEvent({
   title,
 }: React.PropsWithChildren<{
   title: string;
 }>) {
   return (
-    <div className="flex bg-tg-section-bg-color p-1 rounded-2xl">
-      <h3 className="py-7 px-3 w-full text-tg-hint-color text-sm text-center">{title}</h3>
+    <div className="flex flex-col gap-8 items-center bg-tg-section-bg-color p-7 rounded-2xl">
+      <Ufo className="size-16 text-tg-link-color animate-pulse" />
+      <h3 className="text-lg whitespace-break-spaces leading-tight">{title}</h3>
     </div>
   );
 }

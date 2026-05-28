@@ -8,8 +8,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Combobox } from '@headlessui/react';
 import clsx from 'clsx';
 
+import EmptyState from '@components/empty-state';
+import { Ufo } from '@components/icon/bold';
 import SearchResults from '@components/search/seacth-results';
-import SearchEmptyResult from '@components/search/search-empty-result';
 import SearchInput from '@components/search/search-input';
 
 import { useFavouritesStore } from '@store/favouritesStore';
@@ -77,7 +78,7 @@ export default function SearchSelection({
             handleNavigation={handleNavigation}
           />
         ) : (
-          <SearchEmptyResult title={t('no-results')} />
+          <EmptyState icon={<Ufo />} title={t('no-results')} />
         )}
       </div>
     </Combobox>

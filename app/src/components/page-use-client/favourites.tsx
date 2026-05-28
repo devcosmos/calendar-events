@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import CalendarEventCard from '@components/calendar/calendar-event-card';
+import EmptyState from '@components/empty-state';
 import { BookmarkFolder } from '@components/icon/bold';
 
 import { useFavouritesStore } from '@store/favouritesStore';
@@ -18,14 +19,7 @@ export default function Favourites() {
   );
 
   if (favourites.length === 0) {
-    return (
-      <div className="flex flex-wrap justify-center text-center">
-        <div className="bg-tg-section-bg-color rounded-full my-14 size-48 flex items-center justify-center">
-          <BookmarkFolder className="!size-24 text-tg-link-color animate-pulse" />
-        </div>
-        <p className="text-lg whitespace-break-spaces leading-tight mb-7 px-2">{t('empty-page-title')} ⭐</p>
-      </div>
-    );
+    return <EmptyState icon={<BookmarkFolder />} title={`${t('empty-page-title')} ⭐`} />;
   }
 
   return (

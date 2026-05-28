@@ -1,0 +1,24 @@
+import clsx from 'clsx';
+
+interface EmptyStateProps {
+  icon: React.ReactNode;
+  title: string;
+}
+
+export default function EmptyState({ icon, title }: EmptyStateProps) {
+  return (
+    <div className="h-2/3 w-full flex">
+      <div className="flex flex-col items-center w-full flex-wrap justify-center text-center gap-8">
+        <div
+          className={clsx(
+            'bg-tg-section-bg-color rounded-full size-48 text-tg-link-color flex items-center justify-center',
+            '[&>svg]:size-24 [&>svg]:animate-pulse',
+          )}
+        >
+          {icon}
+        </div>
+        <p className="text-lg whitespace-break-spaces leading-tight mb-7 px-2">{title}</p>
+      </div>
+    </div>
+  );
+}
