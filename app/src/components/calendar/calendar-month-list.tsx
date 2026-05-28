@@ -3,14 +3,16 @@
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useShallow } from 'zustand/react/shallow';
 
 import Button from '@components/button/button';
 
-import { useFilterStore } from '@store/filterStore';
+import { selectEventFilters, useFilterStore } from '@store/filterStore';
 import { useSwiperStore } from '@store/swiperStore';
 
 import { plural } from '@utils/calendarHelper';
 import { DataQuerySelector } from '@utils/consts';
+import { filterEventsByFilters } from '@utils/eventFilter';
 import { CalendarMonth } from '@utils/types';
 
 interface CalendarMonthListProps {
@@ -22,9 +24,7 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
   const currMonthIndex = useSwiperStore((s) => s.currMonthIndex);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
   const swiper = useSwiperStore((s) => s.swiper);
-  const selectedCompanies = useFilterStore((s) => s.selectedCompanies);
-  const selectedCities = useFilterStore((s) => s.selectedCities);
-  const selectedReservoirTypes = useFilterStore((s) => s.selectedReservoirTypes);
+  const filters = useFilterStore(useShallow(selectEventFilters));
 
   const handleMonthClick = (idx: number) => {
     if (idx === selectedMonthIndex) {
@@ -39,14 +39,7 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
   };
 
   const getFilteredEventCount = (events: (typeof months)[0]['events']) => {
-    return events.filter((e) => {
-      const companyMatches =
-        selectedCompanies.length === 0 || (e.company !== null && selectedCompanies.includes(e.company));
-      const cityMatches = selectedCities.length === 0 || selectedCities.includes(e.location.city);
-      const reservoirType = e.location.reservoir === 'Бассейн' ? 'pool' : 'openwater';
-      const reservoirMatches = selectedReservoirTypes.length === 0 || selectedReservoirTypes.includes(reservoirType);
-      return companyMatches && cityMatches && reservoirMatches;
-    }).length;
+    return filterEventsByFilters(events, filters).length;
   };
 
   // Group months by year

@@ -15,14 +15,24 @@ import { useMainStore } from '@store/mainStore';
 import { useSwiperStore } from '@store/swiperStore';
 
 import { DataQuerySelector } from '@utils/consts';
+import { ReservoirType } from '@utils/eventFilter';
 import { CalendarMonth } from '@utils/types';
 
 interface CalendarSliderProps {
   months: CalendarMonth[];
   currentMonthIndex: number;
+  companies: string[];
+  cities: string[];
+  reservoirTypes: Array<{ id: ReservoirType; label: string }>;
 }
 
-export default function CalendarSlider({ months, currentMonthIndex }: CalendarSliderProps) {
+export default function CalendarSlider({
+  months,
+  currentMonthIndex,
+  companies,
+  cities,
+  reservoirTypes,
+}: CalendarSliderProps) {
   const setSwiper = useSwiperStore((s) => s.setSwiper);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
 
@@ -31,43 +41,6 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
   const swiperRef = useRef<SwiperType | null>(null);
 
   const displayIndex = selectedMonthIndex ?? currentMonthIndex;
-
-  const companyCountMap = months
-    .flatMap((m) => m.events)
-    .reduce<Record<string, number>>((acc, e) => {
-      if (e.company) acc[e.company] = (acc[e.company] ?? 0) + 1;
-      return acc;
-    }, {});
-
-  const allCompanies = Object.entries(companyCountMap)
-    .filter(([, count]) => count >= 10)
-    .map(([company]) => company)
-    .sort();
-
-  const cityCountMap = months
-    .flatMap((m) => m.events)
-    .reduce<Record<string, number>>((acc, e) => {
-      const city = e.location.city?.trim();
-      if (city) acc[city] = (acc[city] ?? 0) + 1;
-      return acc;
-    }, {});
-
-  const allCities = Object.entries(cityCountMap)
-    .filter(([, count]) => count > 2)
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ru'))
-    .map(([city]) => city);
-
-  const reservoirTypes: Array<{ id: string; label: string }> = [];
-  const reservoirCountMap = months
-    .flatMap((m) => m.events)
-    .reduce<Record<string, number>>((acc, e) => {
-      const type = e.location.reservoir === 'Бассейн' ? 'pool' : 'openwater';
-      acc[type] = (acc[type] ?? 0) + 1;
-      return acc;
-    }, {});
-
-  if (reservoirCountMap['pool']) reservoirTypes.push({ id: 'pool', label: 'Бассейн' });
-  if (reservoirCountMap['openwater']) reservoirTypes.push({ id: 'openwater', label: 'Открытая вода' });
 
   // Only render prev/curr/next months
   const visibleSlides: { month: CalendarMonth; index: number }[] = [];
@@ -167,7 +140,7 @@ export default function CalendarSlider({ months, currentMonthIndex }: CalendarSl
       {/* Right edge: filter panel */}
       <SwiperSlide className="h-auto">
         <CalendarSliderContainer>
-          <FilterPanel companies={allCompanies} cities={allCities} reservoirTypes={reservoirTypes} />
+          <FilterPanel companies={companies} cities={cities} reservoirTypes={reservoirTypes} />
         </CalendarSliderContainer>
       </SwiperSlide>
     </Swiper>

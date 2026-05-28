@@ -4,10 +4,12 @@ import { clsx } from 'clsx';
 
 import { useFilterStore } from '@store/filterStore';
 
+import { ReservoirType } from '@utils/eventFilter';
+
 interface FilterPanelProps {
   companies: string[];
   cities: string[];
-  reservoirTypes: Array<{ id: string; label: string }>;
+  reservoirTypes: Array<{ id: ReservoirType; label: string }>;
 }
 
 export default function FilterPanel({ companies, cities, reservoirTypes }: FilterPanelProps) {

@@ -1,15 +1,13 @@
 import { create } from 'zustand';
 
-interface FilterState {
-  selectedCompanies: string[];
-  selectedCities: string[];
-  selectedReservoirTypes: string[];
-}
+import { EventFilters, ReservoirType, hasActiveEventFilters } from '@utils/eventFilter';
+
+type FilterState = EventFilters;
 
 interface FilterActions {
   toggleCompany: (company: string) => void;
   toggleCity: (city: string) => void;
-  toggleReservoirType: (type: string) => void;
+  toggleReservoirType: (type: ReservoirType) => void;
   clearFilters: () => void;
 }
 
@@ -37,3 +35,13 @@ export const useFilterStore = create<FilterState & FilterActions>((set) => ({
     })),
   clearFilters: () => set({ selectedCompanies: [], selectedCities: [], selectedReservoirTypes: [] }),
 }));
+
+export const selectEventFilters = (state: FilterState): EventFilters => ({
+  selectedCompanies: state.selectedCompanies,
+  selectedCities: state.selectedCities,
+  selectedReservoirTypes: state.selectedReservoirTypes,
+});
+
+export const selectHasActiveFilters = (state: FilterState): boolean => {
+  return hasActiveEventFilters(selectEventFilters(state));
+};
