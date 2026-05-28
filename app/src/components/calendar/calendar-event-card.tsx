@@ -66,7 +66,7 @@ export default function CalendarEventCard({ event, ordinal }: CalendarEventCardP
         ) : (
           <span className="text-sm text-tg-hint-color">{locationText}</span>
         )}
-        <div className="grid grid-cols-2 gap-2 items-end text-sm text-tg-hint-color leading-tight mt-7">
+        <div className="grid grid-cols-2 gap-2 items-end text-sm text-tg-hint-color leading-tight mt-5">
           <span>{dateStr}</span>
           {event.company && <span className="text-end whitespace-break-spaces">{event.company}</span>}
         </div>
