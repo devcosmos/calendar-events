@@ -56,6 +56,11 @@ docker run -p 3000:3000 schedule-frontend
 
 ## 🎨 Credits
 
-Иконки: [480 Design](https://www.figma.com/community/file/1166831539721848736), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Иконки: [Solar](https://icon-sets.iconify.design/solar/) by [480 Design](https://www.figma.com/community/file/1166831539721848736), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
-Иконки: [Font Awesome](https://fontawesome.com), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+## TODO:
+
+- Update dependencies (tailwind to 4v)
+- цветовые схемы - баги на светлых темах
+- tabbar botton add animation from favourive button
+- рефактор кнопок - сделать три вида
