@@ -200,7 +200,12 @@ export default function CalendarSlider({
           {...(index === displayIndex && { [DataQuerySelector.SelectedMonthSlide]: '' })}
         >
           <CalendarSliderContainer>
-            <CalendarMonthView month={month} targetEventId={targetEventId} />
+            <CalendarMonthView
+              month={month}
+              targetEventId={targetEventId}
+              monthIndex={index}
+              currentMonthIndex={currentMonthIndex}
+            />
           </CalendarSliderContainer>
         </SwiperSlide>
       ))}
