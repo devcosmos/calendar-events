@@ -42,6 +42,24 @@
     "empty-month": "В этом месяце событий нет",
     "today": "Сегодня",
     "tomorrow": "Завтра",
-    "nearest-event": "Ближайшее событие"
+    "nearest-event": "Ближайшее событие",
+    "filters": {
+      "groups": {
+        "waterType": "Тип акватории",
+        "organizer": "Организатор",
+        "country": "Страна проведения",
+        "city": "Город проведения"
+      },
+      "options": {
+        "waterType": {
+          "pool": "Бассейн",
+          "openWater": "Открытая вода"
+        },
+        "country": {
+          "russia": "Россия",
+          "abroad": "За рубежом"
+        }
+      }
+    }
   }
 }

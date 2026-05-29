@@ -2,12 +2,14 @@
 
 import { useEffect, useMemo } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import CalendarHeader from '@components/calendar/calendar-header';
 import CalendarSlider from '@components/calendar/calendar-slider';
 
 import { useSwiperStore } from '@store/swiperStore';
 
-import { RESERVOIR_TYPE_LABELS, ReservoirType, getReservoirType } from '@utils/eventFilter';
+import { ReservoirType, getReservoirType } from '@utils/eventFilter';
 import { CalendarMonth } from '@utils/types';
 
 interface CalendarViewProps {
@@ -16,6 +18,8 @@ interface CalendarViewProps {
 }
 
 export default function CalendarView({ months, currentMonthIndex }: CalendarViewProps) {
+  const t = useTranslations('calendar');
+
   const setCurrMonthIndex = useSwiperStore((s) => s.setCurrMonthIndex);
   const setSelectedMonthIndex = useSwiperStore((s) => s.setSelectedMonthIndex);
 
@@ -60,17 +64,17 @@ export default function CalendarView({ months, currentMonthIndex }: CalendarView
       }, {});
 
     if (reservoirCountMap[ReservoirType.Pool]) {
-      reservoirTypes.push({ id: ReservoirType.Pool, label: RESERVOIR_TYPE_LABELS[ReservoirType.Pool] });
+      reservoirTypes.push({ id: ReservoirType.Pool, label: t('filters.options.waterType.pool') });
     }
     if (reservoirCountMap[ReservoirType.OpenWater]) {
       reservoirTypes.push({
         id: ReservoirType.OpenWater,
-        label: RESERVOIR_TYPE_LABELS[ReservoirType.OpenWater],
+        label: t('filters.options.waterType.openWater'),
       });
     }
 
     return { companies, cities, reservoirTypes };
-  }, [months]);
+  }, [months, t]);
 
   return (
     <>

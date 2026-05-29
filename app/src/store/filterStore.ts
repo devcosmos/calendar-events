@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { EventFilters, ReservoirType, hasActiveEventFilters } from '@utils/eventFilter';
+import { AbroadFilter, EventFilters, ReservoirType, hasActiveEventFilters } from '@utils/eventFilter';
 
 type FilterState = EventFilters;
 
@@ -8,6 +8,7 @@ interface FilterActions {
   toggleCompany: (company: string) => void;
   toggleCity: (city: string) => void;
   toggleReservoirType: (type: ReservoirType) => void;
+  toggleAbroadFilter: (type: AbroadFilter) => void;
   clearFilters: () => void;
 }
 
@@ -15,6 +16,7 @@ export const useFilterStore = create<FilterState & FilterActions>((set) => ({
   selectedCompanies: [],
   selectedCities: [],
   selectedReservoirTypes: [],
+  selectedAbroadFilters: [],
   toggleCompany: (company) =>
     set((state) => ({
       selectedCompanies: state.selectedCompanies.includes(company)
@@ -33,13 +35,26 @@ export const useFilterStore = create<FilterState & FilterActions>((set) => ({
         ? state.selectedReservoirTypes.filter((t) => t !== type)
         : [...state.selectedReservoirTypes, type],
     })),
-  clearFilters: () => set({ selectedCompanies: [], selectedCities: [], selectedReservoirTypes: [] }),
+  toggleAbroadFilter: (type) =>
+    set((state) => ({
+      selectedAbroadFilters: state.selectedAbroadFilters.includes(type)
+        ? state.selectedAbroadFilters.filter((t) => t !== type)
+        : [...state.selectedAbroadFilters, type],
+    })),
+  clearFilters: () =>
+    set({
+      selectedCompanies: [],
+      selectedCities: [],
+      selectedReservoirTypes: [],
+      selectedAbroadFilters: [],
+    }),
 }));
 
 export const selectEventFilters = (state: FilterState): EventFilters => ({
   selectedCompanies: state.selectedCompanies,
   selectedCities: state.selectedCities,
   selectedReservoirTypes: state.selectedReservoirTypes,
+  selectedAbroadFilters: state.selectedAbroadFilters,
 });
 
 export const selectHasActiveFilters = (state: FilterState): boolean => {

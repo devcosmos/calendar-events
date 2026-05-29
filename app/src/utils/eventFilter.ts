@@ -5,19 +5,24 @@ export enum ReservoirType {
   OpenWater = 'openwater',
 }
 
+export enum AbroadFilter {
+  Russia = 'russia',
+  Abroad = 'abroad',
+}
+
 export type EventFilters = {
   selectedCompanies: string[];
   selectedCities: string[];
   selectedReservoirTypes: ReservoirType[];
-};
-
-export const RESERVOIR_TYPE_LABELS: Record<ReservoirType, string> = {
-  [ReservoirType.Pool]: 'Бассейн',
-  [ReservoirType.OpenWater]: 'Открытая вода',
+  selectedAbroadFilters: AbroadFilter[];
 };
 
 export const getReservoirType = (event: SwimEvent): ReservoirType => {
   return event.location.reservoir === 'Бассейн' ? ReservoirType.Pool : ReservoirType.OpenWater;
+};
+
+export const getAbroadFilter = (event: SwimEvent): AbroadFilter => {
+  return event.location.is_abroad ? AbroadFilter.Abroad : AbroadFilter.Russia;
 };
 
 export const isEventMatchingFilters = (event: SwimEvent, filters: EventFilters): boolean => {
@@ -31,7 +36,11 @@ export const isEventMatchingFilters = (event: SwimEvent, filters: EventFilters):
   const reservoirMatches =
     filters.selectedReservoirTypes.length === 0 || filters.selectedReservoirTypes.includes(reservoirType);
 
-  return companyMatches && cityMatches && reservoirMatches;
+  const abroadType = getAbroadFilter(event);
+  const abroadMatches =
+    filters.selectedAbroadFilters.length === 0 || filters.selectedAbroadFilters.includes(abroadType);
+
+  return companyMatches && cityMatches && reservoirMatches && abroadMatches;
 };
 
 export const filterEventsByFilters = (events: SwimEvent[], filters: EventFilters): SwimEvent[] => {
@@ -42,6 +51,7 @@ export const hasActiveEventFilters = (filters: EventFilters): boolean => {
   return (
     filters.selectedCompanies.length > 0 ||
     filters.selectedCities.length > 0 ||
-    filters.selectedReservoirTypes.length > 0
+    filters.selectedReservoirTypes.length > 0 ||
+    filters.selectedAbroadFilters.length > 0
   );
 };

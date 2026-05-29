@@ -42,6 +42,24 @@
     "empty-month": "No events this month",
     "today": "Today",
     "tomorrow": "Tomorrow",
-    "nearest-event": "Nearest event"
+    "nearest-event": "Nearest event",
+    "filters": {
+      "groups": {
+        "waterType": "Water type",
+        "organizer": "Organizer",
+        "country": "Country",
+        "city": "Host city"
+      },
+      "options": {
+        "waterType": {
+          "pool": "Pool",
+          "openWater": "Open water"
+        },
+        "country": {
+          "russia": "Russia",
+          "abroad": "Abroad"
+        }
+      }
+    }
   }
 }
