@@ -5,17 +5,13 @@ import { useTranslations } from 'next-intl';
 import { postEvent } from '@tma.js/sdk-react';
 
 import ActionButton from '@components/button/action-button';
-import { EyeClosed, Globe, Help } from '@components/icon/outline';
-
-import { useMainStore } from '@store/mainStore';
+import { Globe, Help } from '@components/icon/outline';
 
 import { ENDPOINTS } from '@utils/api/endpoints';
 import { AppRoute } from '@utils/consts';
 
 export default function Settings() {
   const t = useTranslations(AppRoute.Settings);
-
-  const { hideEmptyDays, setHideEmptyDays } = useMainStore();
 
   const handleSupportClick = () => {
     try {
@@ -31,9 +27,6 @@ export default function Settings() {
     <div className="flex flex-wrap gap-2">
       <ActionButton href={AppRoute.Language} title={t('language')} value={t('current-language-value')}>
         <Globe className="size-6 opacity-50" />
-      </ActionButton>
-      <ActionButton title={t('hide-empty-days')} enabled={hideEmptyDays} setEnabled={setHideEmptyDays}>
-        <EyeClosed className="size-6 opacity-50" />
       </ActionButton>
       <ActionButton onClick={handleSupportClick} title={t('contact-support')}>
         <Help className="size-6 opacity-50" />

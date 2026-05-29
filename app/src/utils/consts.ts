@@ -27,10 +27,6 @@ export const AppRouteTitle: { [key in AppRoute]: string } = {
   [AppRoute.NotFound]: 'Страница не найдена',
 };
 
-export enum UserType {
-  Undefined = 'Undefined',
-}
-
 export enum ButtonSize {
   Medium = 'medium',
   Base = 'base',
