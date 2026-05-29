@@ -15,9 +15,16 @@ import { CalendarMonth } from '@utils/types';
 interface CalendarViewProps {
   months: CalendarMonth[];
   currentMonthIndex: number;
+  targetMonthIndex?: number;
+  targetEventId?: string;
 }
 
-export default function CalendarView({ months, currentMonthIndex }: CalendarViewProps) {
+export default function CalendarView({
+  months,
+  currentMonthIndex,
+  targetMonthIndex,
+  targetEventId,
+}: CalendarViewProps) {
   const t = useTranslations('calendar');
 
   const setCurrMonthIndex = useSwiperStore((s) => s.setCurrMonthIndex);
@@ -25,8 +32,8 @@ export default function CalendarView({ months, currentMonthIndex }: CalendarView
 
   useEffect(() => {
     setCurrMonthIndex(currentMonthIndex);
-    setSelectedMonthIndex(currentMonthIndex);
-  }, [currentMonthIndex, setCurrMonthIndex, setSelectedMonthIndex]);
+    setSelectedMonthIndex(targetMonthIndex ?? currentMonthIndex);
+  }, [currentMonthIndex, targetMonthIndex, setCurrMonthIndex, setSelectedMonthIndex]);
 
   const { companies, cities, reservoirTypes } = useMemo(() => {
     const companyCountMap = months
@@ -82,6 +89,7 @@ export default function CalendarView({ months, currentMonthIndex }: CalendarView
       <CalendarSlider
         months={months}
         currentMonthIndex={currentMonthIndex}
+        targetEventId={targetEventId}
         companies={companies}
         cities={cities}
         reservoirTypes={reservoirTypes}

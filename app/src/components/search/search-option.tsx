@@ -31,7 +31,7 @@ export default function SearchOption({
     setTimeout(() => {
       addSearchHistoryItem(entity);
     }, 1000);
-    handleNavigation(AppRoute.Home);
+    handleNavigation(`${AppRoute.Home}?eventId=${encodeURIComponent(entity.id)}`);
   };
 
   return (

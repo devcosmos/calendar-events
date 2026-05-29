@@ -10,11 +10,13 @@ import { Locale } from '@core/i18n/config';
 
 import { useMainStore } from '@store/mainStore';
 
+import { DataQuerySelector } from '@utils/consts';
 import { SwimEvent } from '@utils/types';
 
 interface CalendarEventCardProps {
   event: SwimEvent;
   ordinal: number;
+  isTargetEvent?: boolean;
 }
 
 function formatDateRange(start: string, end: string, locale: string): string {
@@ -32,7 +34,7 @@ function formatDateRange(start: string, end: string, locale: string): string {
   return `${format(s, 'd MMM', { locale: dateFnsLocale })} – ${format(e, 'd MMM', { locale: dateFnsLocale })}`;
 }
 
-export default function CalendarEventCard({ event, ordinal }: CalendarEventCardProps) {
+export default function CalendarEventCard({ event, ordinal, isTargetEvent = false }: CalendarEventCardProps) {
   const { locale } = useMainStore();
   const dateStr = formatDateRange(event.start_date, event.end_date, locale);
   const locationText = [event.location.city, event.location.reservoir].filter(Boolean).join(', ');
@@ -40,12 +42,15 @@ export default function CalendarEventCard({ event, ordinal }: CalendarEventCardP
   const isEventNow = new Date(event.start_date) <= new Date() && new Date() < new Date(event.end_date);
 
   return (
-    <div className="flex gap-1 bg-tg-section-bg-color p-1 rounded-2xl overflow-hidden">
+    <div
+      {...(isTargetEvent && { [DataQuerySelector.SelectedEvent]: '' })}
+      className="flex gap-1 bg-tg-section-bg-color p-1 rounded-2xl overflow-hidden"
+    >
       <div className="flex flex-col items-center justify-between">
         <span
           className={clsx(
             'border rounded-full size-8 text-sm leading-[0.5] flex justify-center items-center flex-shrink-0 self-start',
-            isEventNow ? 'border-orange-500' : 'border-tg-text-color/25',
+            isEventNow || isTargetEvent ? 'border-orange' : 'border-tg-text-color/25',
           )}
         >
           {ordinal}
@@ -53,7 +58,9 @@ export default function CalendarEventCard({ event, ordinal }: CalendarEventCardP
         <FavouriteButton SwimEvent={event} />
       </div>
       <div className="p-2 pt-1 flex-grow">
-        <h3 className={clsx('text-lg leading-tight mb-2', isEventPassed && 'text-tg-hint-color')}>{event.name}</h3>
+        <h3 className={clsx('text-lg leading-tight mb-2', isEventPassed && !isTargetEvent && 'text-tg-hint-color')}>
+          {event.name}
+        </h3>
         {event.location.map_url ? (
           <a
             href={event.location.map_url}

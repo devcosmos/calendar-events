@@ -16,6 +16,7 @@ import { CalendarMonth, SwimEvent } from '@utils/types';
 
 interface CalendarMonthViewProps {
   month: CalendarMonth;
+  targetEventId?: string;
 }
 
 type DayGroup = {
@@ -38,7 +39,7 @@ function groupByDay(events: SwimEvent[]): DayGroup[] {
   return groups;
 }
 
-export default function CalendarMonthView({ month }: CalendarMonthViewProps) {
+export default function CalendarMonthView({ month, targetEventId }: CalendarMonthViewProps) {
   const t = useTranslations('calendar');
   const filters = useFilterStore(useShallow(selectEventFilters));
 
@@ -63,7 +64,12 @@ export default function CalendarMonthView({ month }: CalendarMonthViewProps) {
           <DayHeader date={date} isNearestDay={dayIdx === nearestDayIndex} currentWeek />
           <div className="flex flex-col gap-1.5">
             {events.map((event, eventIdx) => (
-              <CalendarEventCard key={event.id} event={event} ordinal={eventIdx + 1} />
+              <CalendarEventCard
+                key={event.id}
+                event={event}
+                ordinal={eventIdx + 1}
+                isTargetEvent={event.id === targetEventId}
+              />
             ))}
           </div>
         </div>

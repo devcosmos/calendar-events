@@ -39,6 +39,7 @@ export enum ButtonSize {
 export enum DataQuerySelector {
   CurrentMonthButton = 'data-current-month-button',
   SelectedMonthSlide = 'data-selected-month-slide',
+  SelectedEvent = 'data-selected-event',
   Today = 'data-today',
 }
 

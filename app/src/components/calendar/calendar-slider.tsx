@@ -21,6 +21,7 @@ import { CalendarMonth } from '@utils/types';
 interface CalendarSliderProps {
   months: CalendarMonth[];
   currentMonthIndex: number;
+  targetEventId?: string;
   companies: string[];
   cities: string[];
   reservoirTypes: { id: ReservoirType; label: string }[];
@@ -29,6 +30,7 @@ interface CalendarSliderProps {
 export default function CalendarSlider({
   months,
   currentMonthIndex,
+  targetEventId,
   companies,
   cities,
   reservoirTypes,
@@ -39,6 +41,7 @@ export default function CalendarSlider({
   const { hintForSwiping, hideHintForSwiping } = useMainStore();
 
   const swiperRef = useRef<SwiperType | null>(null);
+  const handledTargetEventIdRef = useRef<string | null>(null);
 
   const displayIndex = selectedMonthIndex ?? currentMonthIndex;
 
@@ -73,9 +76,72 @@ export default function CalendarSlider({
 
   // First-load: scroll to today and show swipe hint
   useEffect(() => {
+    if (!targetEventId) return;
+    if (handledTargetEventIdRef.current === targetEventId) return;
+
+    const swiper = swiperRef.current;
+    if (!swiper || swiper.destroyed) return;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    const getSlides = () => (swiper && !swiper.destroyed ? swiper.slides : undefined);
+
+    const centerIdx = getSlides()?.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide)) ?? -1;
+    if (centerIdx === -1) return;
+
+    const scrollToTargetEvent = (slideIndex: number): boolean => {
+      const slides = getSlides();
+      if (!slides || slideIndex < 0 || !slides[slideIndex]) return false;
+
+      const targetElement = slides[slideIndex].querySelector(`[${DataQuerySelector.SelectedEvent}]`);
+      if (!targetElement) return false;
+
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return true;
+    };
+
+    const tryScrollWithRetry = (slideIndex: number, retries = 8) => {
+      const didScroll = scrollToTargetEvent(slideIndex);
+      if (didScroll) {
+        clearTargetEventFromUrl();
+        handledTargetEventIdRef.current = targetEventId;
+        return;
+      }
+
+      if (retries <= 0) return;
+      retryTimer = setTimeout(() => tryScrollWithRetry(slideIndex, retries - 1), 120);
+    };
+
+    const clearTargetEventFromUrl = () => {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('eventId')) return;
+
+      url.searchParams.delete('eventId');
+      const cleanUrl = `${url.pathname}${url.search}${url.hash}`;
+      window.history.replaceState(window.history.state, '', cleanUrl);
+    };
+
+    if (swiper.activeIndex === centerIdx) {
+      tryScrollWithRetry(centerIdx);
+      return;
+    }
+
+    const handleTransitionEnd = () => {
+      tryScrollWithRetry(centerIdx);
+      swiper.off('transitionEnd', handleTransitionEnd);
+    };
+
+    swiper.on('transitionEnd', handleTransitionEnd);
+    swiper.slideTo(centerIdx, 300);
+
+    return () => {
+      swiper.off('transitionEnd', handleTransitionEnd);
+      if (retryTimer) clearTimeout(retryTimer);
+    };
+  }, [targetEventId, selectedMonthIndex]);
+
+  useEffect(() => {
     const scrollTimer = setTimeout(() => {
       const swiper = swiperRef.current;
-      if (!swiper || swiper.destroyed) return;
+      if (!swiper || swiper.destroyed || !swiper.slides) return;
       swiper.slides[swiper.activeIndex]
         ?.querySelector(`[${DataQuerySelector.Today}]`)
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -105,12 +171,14 @@ export default function CalendarSlider({
         swiperRef.current = s;
       }}
       onSlidesUpdated={(swiper) => {
+        if (!swiper || swiper.destroyed || !swiper.slides) return;
         const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
         if (centerIdx === -1) return;
         // slideTo is a no-op if already at centerIdx (initial load), animates otherwise
         setTimeout(() => swiper.slideTo(centerIdx, 300), 50);
       }}
       onSlideChangeTransitionEnd={(swiper) => {
+        if (!swiper || swiper.destroyed || !swiper.slides) return;
         // Скролл на первом и последнем слайде до текущей недели
         swiper.slides[swiper.activeIndex]
           .querySelector(`[${DataQuerySelector.CurrentMonthButton}]`)
@@ -132,7 +200,7 @@ export default function CalendarSlider({
           {...(index === displayIndex && { [DataQuerySelector.SelectedMonthSlide]: '' })}
         >
           <CalendarSliderContainer>
-            <CalendarMonthView month={month} />
+            <CalendarMonthView month={month} targetEventId={targetEventId} />
           </CalendarSliderContainer>
         </SwiperSlide>
       ))}

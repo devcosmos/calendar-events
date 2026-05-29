@@ -14,39 +14,49 @@ export const useTabBarEvents = () => {
     event: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>,
     querySelector: DataQuerySelector.Today,
   ) => {
-    if (!isOnCalendar || !swiper) return;
+    if (!isOnCalendar || !swiper || swiper.destroyed || currMonthIndex === null) return;
 
     event.preventDefault();
     event.nativeEvent.stopImmediatePropagation();
 
-    const selectedSlideIndex = swiper.slides.findIndex((slide) =>
-      slide.hasAttribute(DataQuerySelector.SelectedMonthSlide),
-    );
-    if (selectedSlideIndex === -1) return;
+    setSelectedMonthIndex(currMonthIndex);
 
-    const scrollToToday = (slideIndex: number) => {
-      if (slideIndex < 0 || !swiper.slides[slideIndex]) return;
-      swiper.slides[slideIndex]
-        .querySelector(`[${querySelector}]`)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const trySlideAndScroll = (retries = 10) => {
+      if (!swiper || swiper.destroyed || !swiper.slides) return;
+
+      const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
+      if (centerIdx === -1) {
+        if (retries > 0) setTimeout(() => trySlideAndScroll(retries - 1), 80);
+        return;
+      }
+
+      const scrollToMarker = (slideIndex: number) => {
+        if (!swiper || swiper.destroyed || !swiper.slides || !swiper.slides[slideIndex]) return false;
+
+        const marker = swiper.slides[slideIndex].querySelector(`[${querySelector}]`);
+        if (!marker) return false;
+
+        marker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return true;
+      };
+
+      if (swiper.activeIndex === centerIdx) {
+        const didScroll = scrollToMarker(centerIdx);
+        if (!didScroll && retries > 0) setTimeout(() => trySlideAndScroll(retries - 1), 80);
+        return;
+      }
+
+      const handleTransitionEnd = () => {
+        const didScroll = scrollToMarker(centerIdx);
+        swiper.off('transitionEnd', handleTransitionEnd);
+        if (!didScroll && retries > 0) setTimeout(() => trySlideAndScroll(retries - 1), 80);
+      };
+
+      swiper.on('transitionEnd', handleTransitionEnd);
+      swiper.slideTo(centerIdx, 300);
     };
 
-    if (currMonthIndex !== null) {
-      setSelectedMonthIndex(currMonthIndex);
-    }
-
-    if (swiper.activeIndex === selectedSlideIndex) {
-      scrollToToday(selectedSlideIndex);
-      return;
-    }
-
-    const handleTransitionEnd = () => {
-      scrollToToday(selectedSlideIndex);
-      swiper.off('transitionEnd', handleTransitionEnd);
-    };
-
-    swiper.on('transitionEnd', handleTransitionEnd);
-    swiper.slideTo(selectedSlideIndex, 300);
+    trySlideAndScroll();
   };
 
   return { pathname, handleNavigationButtonClick };
