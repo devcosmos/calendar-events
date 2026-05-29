@@ -69,7 +69,7 @@ export default function PageWrapper({
     <main className="flex flex-col overflow-hidden">
       <div className="relative flex-1">
         <div className="absolute top-0 bottom-0 left-0 right-0 w-full">
-          <div className={clsx('h-full overflow-auto scrollbar px-3', className)}>
+          <div className={clsx('h-full overflow-auto scrollbar px-3 pb-28', className)}>
             {title && (
               <h1
                 onClick={title === AppRoute.Settings ? handleClick : undefined}
