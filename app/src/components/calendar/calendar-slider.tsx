@@ -27,6 +27,8 @@ interface CalendarSliderProps {
   reservoirTypes: { id: ReservoirType; label: string }[];
 }
 
+const HINT_FOR_SWIPING_DELAY = 3000; // ms
+
 export default function CalendarSlider({
   months,
   currentMonthIndex,
@@ -147,7 +149,7 @@ export default function CalendarSlider({
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => {
         if (swiperRef.current && !swiperRef.current.destroyed) hintScroll(swiperRef.current);
-      }, 1000);
+      }, HINT_FOR_SWIPING_DELAY);
     }, 100);
     return () => clearTimeout(scrollTimer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
