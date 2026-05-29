@@ -1,6 +1,6 @@
-# Schedule Frontend
+# Swim Events Calendar
 
-Пользовательский интерфейс платформы расписаний. Основан на [Next.js](https://nextjs.org/).
+Основан на [Next.js](https://nextjs.org/).
 
 ## 🛠 Стек
 
@@ -12,38 +12,6 @@
 - [Swiper](https://swiperjs.com/)
 - [Zustand](https://zustand-demo.pmnd.rs/)
 
-## 🚀 Установка и запуск
-
-```bash
-npm install
-npm run dev
-```
-
-## 📂 Структура
-
-```
-web/
-├── app/                 # Страницы, маршруты, компоненты и утилиты
-├── public/              # Статичные ресурсы
-└── ...
-```
-
-## 📜 Скрипты
-
-```bash
-npm run dev        # Запуск dev-сервера
-npm run build      # Сборка
-```
-
-## 🐳 Docker
-
-Пример сборки и запуска:
-
-```bash
-docker build -t schedule-frontend .
-docker run -p 3000:3000 schedule-frontend
-```
-
 ## 🧼 Код-стайл
 
 - ESLint: `eslint.config.mjs`
@@ -52,7 +20,7 @@ docker run -p 3000:3000 schedule-frontend
 
 ## 📄 Лицензия
 
-[MIT](../LICENSE)
+[ELASTIC LICENSE 2.0](../LICENSE)
 
 ## 🎨 Credits
 
