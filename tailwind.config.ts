@@ -44,7 +44,6 @@ const config: Config = {
       },
     },
   },
-  safelist: ['border-orange', '!border-orange'],
   plugins: [
     function ({ addVariant }: PluginAPI) {
       addVariant('scrollbar', '&::-webkit-scrollbar');
