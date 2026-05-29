@@ -12,55 +12,46 @@ export const useTabBarEvents = () => {
 
   const t = useTranslations('tab-bar');
 
-  const { swiper, setSelectedMonthIndex, currMonthIndex, setSelectedWeekIndex, currWeekIndex, selectedWeekIndex } =
-    useSwiperStore();
+  const { swiper, setSelectedMonthIndex, currMonthIndex } = useSwiperStore();
   const isOnCalendar = pathname === AppRoute.Home;
 
   const handleNavigationButtonClick = (
     event: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>,
     querySelector: DataQuerySelector.Today,
   ) => {
-    if (!swiper) return;
+    if (!isOnCalendar || !swiper) return;
 
-    if (isOnCalendar) {
-      event.preventDefault();
-      event.nativeEvent.stopImmediatePropagation();
+    event.preventDefault();
+    event.nativeEvent.stopImmediatePropagation();
 
-      // Navigate to current month slide (slide 0 = list, slides 1..N = months)
-      if (currMonthIndex !== null) {
-        setSelectedMonthIndex(currMonthIndex);
-        swiper.slideTo(
-          swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide)),
-          300,
-        );
-      }
+    const selectedSlideIndex = swiper.slides.findIndex((slide) =>
+      slide.hasAttribute(DataQuerySelector.SelectedMonthSlide),
+    );
+    if (selectedSlideIndex === -1) return;
+
+    const scrollToToday = (slideIndex: number) => {
+      if (slideIndex < 0 || !swiper.slides[slideIndex]) return;
+      swiper.slides[slideIndex]
+        .querySelector(`[${querySelector}]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    if (currMonthIndex !== null) {
+      setSelectedMonthIndex(currMonthIndex);
+    }
+
+    if (swiper.activeIndex === selectedSlideIndex) {
+      scrollToToday(selectedSlideIndex);
       return;
     }
 
-    if (swiper.activeIndex === undefined || !swiper.slides || swiper.slides.length === 0) return;
-
     const handleTransitionEnd = () => {
-      swiper.slides[swiper.activeIndex].querySelector(`[${querySelector}]`)?.scrollIntoView({ behavior: 'smooth' });
+      scrollToToday(selectedSlideIndex);
       swiper.off('transitionEnd', handleTransitionEnd);
     };
 
-    const targetSlide = swiper.slides[swiper.activeIndex];
-    const targetElement = targetSlide.querySelector(`[${querySelector}]`);
-
-    if (targetSlide.hasAttribute(DataQuerySelector.SelectedMonthSlide)) {
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        setSelectedWeekIndex(currWeekIndex);
-        swiper.on('transitionEnd', handleTransitionEnd);
-      }
-    } else {
-      if (selectedWeekIndex !== currWeekIndex) {
-        setSelectedWeekIndex(currWeekIndex);
-      }
-      swiper.slideTo(swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide)));
-      swiper.on('transitionEnd', handleTransitionEnd);
-    }
+    swiper.on('transitionEnd', handleTransitionEnd);
+    swiper.slideTo(selectedSlideIndex, 300);
   };
 
   const handleDisableButtonClick = (event: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>, id: string) => {
