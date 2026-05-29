@@ -12,7 +12,8 @@ export default function Metrika() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const url = `${pathName}?${searchParams}`;
+    const params = searchParams.toString();
+    const url = pathName + (params && '?' + params);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
