@@ -1,10 +1,11 @@
+import { Suspense } from 'react';
+
 import type { Metadata } from 'next';
 import { Rubik } from 'next/font/google';
 
 import '@styles/globals.css';
 
-import YandexMetrica from '@components/yandex-metrica';
-
+import Metrica from '@core/counter/metrica';
 import I18nProvider from '@core/i18n/provider';
 import TelegramProvider from '@core/telegram/provider';
 
@@ -29,10 +30,12 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={rubik.className}>
-        <YandexMetrica />
         <I18nProvider>
           <TelegramProvider>{children}</TelegramProvider>
         </I18nProvider>
+        <Suspense>
+          <Metrica />
+        </Suspense>
       </body>
     </html>
   );
