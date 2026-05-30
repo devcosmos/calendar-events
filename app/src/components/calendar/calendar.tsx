@@ -45,8 +45,8 @@ export default function CalendarView({
 
     const companies = Object.entries(companyCountMap)
       .filter(([, count]) => count >= 10)
-      .map(([company]) => company)
-      .sort();
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ru'))
+      .map(([company]) => company);
 
     const cityCountMap = months
       .flatMap((m) => m.events)
