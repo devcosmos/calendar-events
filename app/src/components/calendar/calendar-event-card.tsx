@@ -59,14 +59,20 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
       </div>
       <div className="p-2 pt-1 flex-grow">
         <h3 className={clsx('text-lg leading-tight mb-2', isEventPassed && !isTargetEvent && 'text-tg-hint-color')}>
-          {event.name}
+          {event.registration_url ? (
+            <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
+              {event.name}
+            </a>
+          ) : (
+            event.name
+          )}
         </h3>
         {event.location.map_url ? (
           <a
             href={event.location.map_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-tg-link-color text-sm"
+            className="text-tg-link-color text-sm !leading-none"
           >
             {locationText}
           </a>
@@ -75,7 +81,19 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
         )}
         <div className="grid grid-cols-2 gap-2 items-end text-sm text-tg-hint-color leading-tight mt-5">
           <span>{dateStr}</span>
-          {event.company && <span className="text-end whitespace-break-spaces">{event.company.name}</span>}
+          {event.company &&
+            (event.company.url ? (
+              <a
+                href={event.company.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-end whitespace-break-spaces text-tg-link-color"
+              >
+                {event.company.name}
+              </a>
+            ) : (
+              <span className="text-end whitespace-break-spaces">{event.company.name}</span>
+            ))}
         </div>
       </div>
     </div>
