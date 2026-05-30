@@ -1,6 +1,4 @@
-import { SwimEventRow } from '@app/src/types/swim-event-db';
-
-import { SwimEvent } from '@utils/types';
+import { SwimEvent, SwimEventRow } from '@utils/types';
 
 export function dbRowToSwimEvent(row: SwimEventRow): SwimEvent {
   return {

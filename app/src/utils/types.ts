@@ -1,6 +1,6 @@
 export type EventLocation = {
   city: string;
-  map_url: string;
+  map_url: string | null;
   reservoir: string | null;
   is_abroad: boolean;
 };
@@ -37,4 +37,25 @@ export type User = {
   language_code?: string;
   last_viewed_post_id?: string;
   updatedAt?: string;
+};
+
+export type SwimEventRow = {
+  id: string;
+  name: string;
+  start_at: string;
+  end_at: string;
+  price: number | null;
+  distances: string[] | null;
+  registration_url: string | null;
+  company_name: string | null;
+  company_url: string | null;
+  city: string;
+  map_url: string | null;
+  reservoir: string | null;
+  is_abroad: boolean | null;
+  source_provider: string | null;
+  source_url: string | null;
+  source_event_id: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 };

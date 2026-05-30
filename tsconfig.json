@@ -20,22 +20,17 @@
     ],
     "paths": {
       "@components/*": ["./app/src/components/*"],
+      "@core/*": ["./app/src/core/*"],
+      "@hooks/*": ["./app/src/hooks/*"],
+      "@lib/*": ["./app/src/lib/*"],
       "@store/*": ["./app/src/store/*"],
       "@styles/*": ["./app/src/styles/*"],
-      "@hooks/*": ["./app/src/hooks/*"],
       "@utils/*": ["./app/src/utils/*"],
-      "@core/*": ["./app/src/core/*"],
       "@public/*": ["./public/*"],
       "@app/*": ["./app/*"],
       "@/*": ["./*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "next-env.d.ts",
-    "build/types/**/*.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next-env.d.ts", "build/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

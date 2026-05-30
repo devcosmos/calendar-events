@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { dbRowToSwimEvent } from '@app/src/lib/mappers/swim-event.mapper';
-import { createServerClient } from '@app/src/lib/supabase/server';
-import { SwimEventRow } from '@app/src/types/swim-event-db';
+import { dbRowToSwimEvent } from '@lib/mappers/swim-event.mapper';
+import { createServerClient } from '@lib/supabase/server';
+
+import { SwimEventRow } from '@utils/types';
 
 export const revalidate = 3600;
 

@@ -1,10 +1,9 @@
 import { unstable_cache } from 'next/cache';
 
-import { SwimEvent } from '@utils/types';
+import { dbRowToSwimEvent } from '@lib/mappers/swim-event.mapper';
+import { createServerClient } from '@lib/supabase/server';
 
-import { dbRowToSwimEvent } from '@/app/src/lib/mappers/swim-event.mapper';
-import { createServerClient } from '@/app/src/lib/supabase/server';
-import { SwimEventRow } from '@/app/src/types/swim-event-db';
+import { SwimEvent, SwimEventRow } from '@utils/types';
 
 /**
  * Выполняет HTTP-запрос к переданному URL и возвращает данные.
