@@ -1,8 +1,10 @@
 import { unstable_cache } from 'next/cache';
 
-import eventsJson from '@public/data/events.json';
-
 import { SwimEvent } from '@utils/types';
+
+import { dbRowToSwimEvent } from '@/app/src/lib/mappers/swim-event.mapper';
+import { createServerClient } from '@/app/src/lib/supabase/server';
+import { SwimEventRow } from '@/app/src/types/swim-event-db';
 
 /**
  * Выполняет HTTP-запрос к переданному URL и возвращает данные.
@@ -34,22 +36,35 @@ export async function fetchFromUrl<T>(url: string): Promise<T | null> {
 
 export const getCachedEvents = unstable_cache(
   async (): Promise<SwimEvent[] | null> => {
-    const allEvents = eventsJson as SwimEvent[];
     const yearFormatter = new Intl.DateTimeFormat('ru-RU', {
       timeZone: 'Europe/Moscow',
       year: 'numeric',
     });
 
     const currentYear = Number.parseInt(yearFormatter.format(new Date()), 10);
-    const minYear = currentYear - 1;
-    const maxYear = currentYear + 1;
+    const from = `${currentYear - 1}-01-01T00:00:00Z`;
+    const to = `${currentYear + 1}-12-31T23:59:59Z`;
 
-    return allEvents
-      .filter((event) => {
-        const eventYear = Number.parseInt(yearFormatter.format(new Date(event.start_date)), 10);
-        return Number.isFinite(eventYear) && eventYear >= minYear && eventYear <= maxYear;
-      })
-      .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+    try {
+      const supabase = createServerClient();
+      const { data, error } = await supabase
+        .from('swim_events')
+        .select<'*', SwimEventRow>('*')
+        .gte('start_at', from)
+        .lte('start_at', to)
+        .order('start_at', { ascending: true })
+        .limit(1000);
+
+      if (error) {
+        console.error('[getCachedEvents] Supabase error:', error.message);
+        return null;
+      }
+
+      return (data ?? []).map(dbRowToSwimEvent);
+    } catch (err) {
+      console.error('[getCachedEvents] Unexpected error:', err instanceof Error ? err.message : err);
+      return null;
+    }
   },
   ['events'],
   { revalidate: 3_600 * 24 },

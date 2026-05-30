@@ -39,7 +39,7 @@ export default function CalendarView({
     const companyCountMap = months
       .flatMap((m) => m.events)
       .reduce<Record<string, number>>((acc, e) => {
-        if (e.company) acc[e.company] = (acc[e.company] ?? 0) + 1;
+        if (e.company) acc[e.company.name] = (acc[e.company.name] ?? 0) + 1;
         return acc;
       }, {});
 

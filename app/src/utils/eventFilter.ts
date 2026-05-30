@@ -28,7 +28,7 @@ export const getAbroadFilter = (event: SwimEvent): AbroadFilter => {
 export const isEventMatchingFilters = (event: SwimEvent, filters: EventFilters): boolean => {
   const companyMatches =
     filters.selectedCompanies.length === 0 ||
-    (event.company !== null && filters.selectedCompanies.includes(event.company));
+    (event.company !== null && filters.selectedCompanies.includes(event.company.name));
 
   const cityMatches = filters.selectedCities.length === 0 || filters.selectedCities.includes(event.location.city);
 

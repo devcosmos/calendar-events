@@ -36,10 +36,10 @@ function formatDateRange(start: string, end: string, locale: string): string {
 
 export default function CalendarEventCard({ event, ordinal, isTargetEvent = false }: CalendarEventCardProps) {
   const { locale } = useMainStore();
-  const dateStr = formatDateRange(event.start_date, event.end_date, locale);
+  const dateStr = formatDateRange(event.start_at, event.end_at, locale);
   const locationText = [event.location.city, event.location.reservoir].filter(Boolean).join(', ');
-  const isEventPassed = new Date(event.end_date) < new Date();
-  const isEventNow = new Date(event.start_date) <= new Date() && new Date() < new Date(event.end_date);
+  const isEventPassed = new Date(event.end_at) < new Date();
+  const isEventNow = new Date(event.start_at) <= new Date() && new Date() < new Date(event.end_at);
 
   return (
     <div
@@ -75,7 +75,7 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
         )}
         <div className="grid grid-cols-2 gap-2 items-end text-sm text-tg-hint-color leading-tight mt-5">
           <span>{dateStr}</span>
-          {event.company && <span className="text-end whitespace-break-spaces">{event.company}</span>}
+          {event.company && <span className="text-end whitespace-break-spaces">{event.company.name}</span>}
         </div>
       </div>
     </div>

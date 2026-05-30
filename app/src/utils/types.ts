@@ -5,16 +5,20 @@ export type EventLocation = {
   is_abroad: boolean;
 };
 
+export type Company = {
+  name: string;
+  url: string | null;
+};
+
 export type SwimEvent = {
   id: string;
   name: string;
-  type: 'competition';
+  start_at: string;
+  end_at: string;
   price: number;
-  registration_due: string;
-  start_date: string;
-  end_date: string;
-  company: string | null;
-  is_uws: boolean;
+  distances: string[];
+  registration_url: string | null;
+  company: Company | null;
   location: EventLocation;
 };
 
