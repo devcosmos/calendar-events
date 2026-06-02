@@ -29,7 +29,7 @@ export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
   });
 
   events.forEach((event) => {
-    const parts = formatter.formatToParts(new Date(event.start_at));
+    const parts = formatter.formatToParts(new Date(event.start_date));
     const year = parseInt(parts.find((p) => p.type === 'year')!.value);
     const month = parseInt(parts.find((p) => p.type === 'month')!.value);
     const key = `${year}-${String(month).padStart(2, '0')}`;

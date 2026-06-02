@@ -39,17 +39,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let query = supabase
       .from('swim_events')
       .select<'*', SwimEventRow>('*')
-      .order('start_at', { ascending: true })
+      .order('start_date', { ascending: true })
       .limit(limit);
 
     if (city !== undefined) {
       query = query.eq('city', city);
     }
     if (from !== undefined) {
-      query = query.gte('start_at', from);
+      query = query.gte('start_date', from);
     }
     if (to !== undefined) {
-      query = query.lte('start_at', to);
+      query = query.lte('start_date', to);
     }
 
     const { data, error } = await query;

@@ -36,10 +36,10 @@ function formatDateRange(start: string, end: string, locale: string): string {
 
 export default function CalendarEventCard({ event, ordinal, isTargetEvent = false }: CalendarEventCardProps) {
   const { locale } = useMainStore();
-  const dateStr = formatDateRange(event.start_at, event.end_at, locale);
-  const locationText = [event.location.city, event.location.reservoir].filter(Boolean).join(', ');
-  const isEventPassed = new Date(event.end_at) < new Date();
-  const isEventNow = new Date(event.start_at) <= new Date() && new Date() < new Date(event.end_at);
+  const dateStr = formatDateRange(event.start_date, event.end_date, locale);
+  const locationText = [event.location.city, event.location.address].filter(Boolean).join(', ');
+  const isEventPassed = new Date(event.end_date) < new Date();
+  const isEventNow = new Date(event.start_date) <= new Date() && new Date() < new Date(event.end_date);
 
   return (
     <div

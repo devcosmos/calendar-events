@@ -27,10 +27,10 @@ type DayGroup = {
 };
 
 function groupByDay(events: SwimEvent[]): DayGroup[] {
-  const sorted = [...events].sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime());
+  const sorted = [...events].sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
   const groups: DayGroup[] = [];
   for (const event of sorted) {
-    const day = startOfDay(new Date(event.start_at));
+    const day = startOfDay(new Date(event.start_date));
     const existing = groups.find((g) => isEqual(g.date, day));
     if (existing) {
       existing.events.push(event);

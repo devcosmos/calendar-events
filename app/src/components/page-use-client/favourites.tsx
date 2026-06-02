@@ -15,7 +15,7 @@ export default function Favourites() {
 
   const { favourites } = useFavouritesStore();
   const sortedFavourites = [...favourites].sort(
-    (a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime(),
+    (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
   );
 
   if (favourites.length === 0) {

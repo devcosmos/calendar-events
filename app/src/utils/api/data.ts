@@ -49,9 +49,9 @@ export const getCachedEvents = unstable_cache(
       const { data, error } = await supabase
         .from('swim_events')
         .select<'*', SwimEventRow>('*')
-        .gte('start_at', from)
-        .lte('start_at', to)
-        .order('start_at', { ascending: true })
+        .gte('start_date', from)
+        .lte('start_date', to)
+        .order('start_date', { ascending: true })
         .limit(1000);
 
       if (error) {

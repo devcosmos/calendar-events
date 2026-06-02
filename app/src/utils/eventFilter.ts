@@ -18,7 +18,7 @@ export type EventFilters = {
 };
 
 export const getReservoirType = (event: SwimEvent): ReservoirType => {
-  return event.location.reservoir === 'Бассейн' ? ReservoirType.Pool : ReservoirType.OpenWater;
+  return event.location.type === 'pool' ? ReservoirType.Pool : ReservoirType.OpenWater;
 };
 
 export const getAbroadFilter = (event: SwimEvent): AbroadFilter => {
