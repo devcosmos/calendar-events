@@ -10,6 +10,7 @@ import { Locale } from '@core/i18n/config';
 
 import { useMainStore } from '@store/mainStore';
 
+import { nbsp } from '@utils/calendarHelper';
 import { DataQuerySelector } from '@utils/consts';
 import { SwimEvent } from '@utils/types';
 
@@ -37,7 +38,6 @@ function formatDateRange(start: string, end: string, locale: string): string {
 export default function CalendarEventCard({ event, ordinal, isTargetEvent = false }: CalendarEventCardProps) {
   const { locale } = useMainStore();
   const dateStr = formatDateRange(event.start_date, event.end_date, locale);
-  const locationText = [event.location.city, event.location.address].filter(Boolean).join(', ');
   const isEventPassed = new Date(event.end_date) < new Date();
   const isEventNow = new Date(event.start_date) <= new Date() && new Date() < new Date(event.end_date);
 
@@ -61,10 +61,10 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
         <h3 className={clsx('text-lg leading-tight mb-2', isEventPassed && !isTargetEvent && 'text-tg-hint-color')}>
           {event.registration_url ? (
             <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
-              {event.name}
+              {nbsp(event.name)}
             </a>
           ) : (
-            event.name
+            nbsp(event.name)
           )}
         </h3>
         {event.location.map_url ? (
@@ -74,10 +74,10 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
             rel="noopener noreferrer"
             className="text-tg-link-color text-sm !leading-none"
           >
-            {locationText}
+            {event.location.address}
           </a>
         ) : (
-          <span className="text-sm text-tg-hint-color">{locationText}</span>
+          <span className="text-sm text-tg-hint-color">{event.location.address}</span>
         )}
         <div className="grid grid-cols-2 gap-2 items-end text-sm text-tg-hint-color leading-tight mt-5">
           <span>{dateStr}</span>
