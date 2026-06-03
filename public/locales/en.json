@@ -45,15 +45,17 @@
     "nearest-event": "Nearest event",
     "filters": {
       "groups": {
-        "waterType": "Water type",
+        "eventType": "Event type",
         "organizer": "Organizer",
         "country": "Country",
         "city": "Host city"
       },
       "options": {
-        "waterType": {
+        "eventType": {
           "pool": "Pool",
-          "openWater": "Open water"
+          "ow": "Open water",
+          "ice": "Ice swimming",
+          "aquathlon": "Aquathlon"
         },
         "country": {
           "russia": "Russia",

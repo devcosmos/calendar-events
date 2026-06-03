@@ -37,7 +37,7 @@ export function FilterPanel({ companies, cities, reservoirTypes }: FilterPanelPr
   return (
     <div className="flex flex-col gap-3 py-4">
       <FilterOptionGroup
-        title={t('filters.groups.waterType')}
+        title={t('filters.groups.eventType')}
         options={reservoirOptions}
         selectedIds={selectedReservoirTypes}
         onToggle={toggleReservoirType}

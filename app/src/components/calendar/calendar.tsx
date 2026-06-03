@@ -70,14 +70,11 @@ export default function CalendarView({
         return acc;
       }, {});
 
-    if (reservoirCountMap[ReservoirType.Pool]) {
-      reservoirTypes.push({ id: ReservoirType.Pool, label: t('filters.options.waterType.pool') });
-    }
-    if (reservoirCountMap[ReservoirType.OpenWater]) {
-      reservoirTypes.push({
-        id: ReservoirType.OpenWater,
-        label: t('filters.options.waterType.openWater'),
-      });
+    const typeOrder = [ReservoirType.Pool, ReservoirType.OpenWater, ReservoirType.Ice, ReservoirType.Aquathlon];
+    for (const type of typeOrder) {
+      if (reservoirCountMap[type]) {
+        reservoirTypes.push({ id: type, label: t(`filters.options.eventType.${type}`) });
+      }
     }
 
     return { companies, cities, reservoirTypes };

@@ -2,7 +2,9 @@ import { SwimEvent } from '@utils/types';
 
 export enum ReservoirType {
   Pool = 'pool',
-  OpenWater = 'openwater',
+  OpenWater = 'ow',
+  Ice = 'ice',
+  Aquathlon = 'aquathlon',
 }
 
 export enum AbroadFilter {
@@ -18,7 +20,7 @@ export type EventFilters = {
 };
 
 export const getReservoirType = (event: SwimEvent): ReservoirType => {
-  return event.location.type === 'pool' ? ReservoirType.Pool : ReservoirType.OpenWater;
+  return event.location.type as ReservoirType;
 };
 
 export const getAbroadFilter = (event: SwimEvent): AbroadFilter => {

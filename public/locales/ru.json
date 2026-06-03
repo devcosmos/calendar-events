@@ -45,15 +45,17 @@
     "nearest-event": "Ближайшее событие",
     "filters": {
       "groups": {
-        "waterType": "Тип акватории",
+        "eventType": "Тип события",
         "organizer": "Организатор",
         "country": "Страна проведения",
         "city": "Город проведения"
       },
       "options": {
-        "waterType": {
+        "eventType": {
           "pool": "Бассейн",
-          "openWater": "Открытая вода"
+          "ow": "Открытая вода",
+          "ice": "Зимнее плавание",
+          "aquathlon": "Акватлон"
         },
         "country": {
           "russia": "Россия",
