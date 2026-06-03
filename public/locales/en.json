@@ -48,7 +48,7 @@
         "eventType": "Event type",
         "organizer": "Organizer",
         "country": "Country",
-        "city": "Host city"
+        "city": "Location"
       },
       "options": {
         "eventType": {
