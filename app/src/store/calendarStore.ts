@@ -1,31 +1,28 @@
 import { EmblaCarouselType } from 'embla-carousel';
 import { create } from 'zustand';
 
-interface CarouselState {
+interface CalendarState {
   emblaApi: EmblaCarouselType | null;
-  selectedWeekIndex: number | null;
-  currWeekIndex: number | null;
   selectedMonthIndex: number | null;
   currMonthIndex: number | null;
+  /** Selector to scroll into view after the next carousel settle */
+  pendingScrollSelector: string | null;
 }
 
-interface CarouselAction {
-  setEmblaApi: (emblaApi: EmblaCarouselType) => void;
-  setSelectedWeekIndex: (selectedWeekIndex: number | null) => void;
-  setCurrWeekIndex: (currWeekIndex: number | null) => void;
+interface CalendarActions {
+  setEmblaApi: (api: EmblaCarouselType) => void;
   setSelectedMonthIndex: (index: number | null) => void;
   setCurrMonthIndex: (index: number | null) => void;
+  setPendingScrollSelector: (selector: string | null) => void;
 }
 
-export const useSwiperStore = create<CarouselState & CarouselAction>((set) => ({
+export const useCalendarStore = create<CalendarState & CalendarActions>((set) => ({
   emblaApi: null,
   setEmblaApi: (emblaApi) => set({ emblaApi }),
-  selectedWeekIndex: null,
-  setSelectedWeekIndex: (selectedWeekIndex) => set({ selectedWeekIndex }),
-  currWeekIndex: null,
-  setCurrWeekIndex: (currWeekIndex) => set({ currWeekIndex }),
   selectedMonthIndex: null,
   setSelectedMonthIndex: (selectedMonthIndex) => set({ selectedMonthIndex }),
   currMonthIndex: null,
   setCurrMonthIndex: (currMonthIndex) => set({ currMonthIndex }),
+  pendingScrollSelector: null,
+  setPendingScrollSelector: (pendingScrollSelector) => set({ pendingScrollSelector }),
 }));

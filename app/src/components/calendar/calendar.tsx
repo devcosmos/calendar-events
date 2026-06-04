@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import CalendarHeader from '@components/calendar/calendar-header';
 import CalendarSlider from '@components/calendar/calendar-slider';
 
-import { useSwiperStore } from '@store/swiperStore';
+import { useCalendarStore } from '@store/calendarStore';
 
 import { ReservoirType, getReservoirType } from '@utils/eventFilter';
 import { CalendarMonth } from '@utils/types';
@@ -27,8 +27,8 @@ export default function CalendarView({
 }: CalendarViewProps) {
   const t = useTranslations('calendar');
 
-  const setCurrMonthIndex = useSwiperStore((s) => s.setCurrMonthIndex);
-  const setSelectedMonthIndex = useSwiperStore((s) => s.setSelectedMonthIndex);
+  const setCurrMonthIndex = useCalendarStore((s) => s.setCurrMonthIndex);
+  const setSelectedMonthIndex = useCalendarStore((s) => s.setSelectedMonthIndex);
 
   useEffect(() => {
     setCurrMonthIndex(currentMonthIndex);

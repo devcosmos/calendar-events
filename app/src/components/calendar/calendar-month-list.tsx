@@ -7,8 +7,10 @@ import { useShallow } from 'zustand/react/shallow';
 
 import Button from '@components/button/button';
 
+import { useCalendarNavigation } from '@hooks/useCalendarNavigation';
+
+import { useCalendarStore } from '@store/calendarStore';
 import { selectEventFilters, useFilterStore } from '@store/filterStore';
-import { useSwiperStore } from '@store/swiperStore';
 
 import { plural } from '@utils/calendarHelper';
 import { DataQuerySelector } from '@utils/consts';
@@ -20,23 +22,17 @@ interface CalendarMonthListProps {
 }
 
 export default function CalendarMonthList({ months }: CalendarMonthListProps) {
-  const setSelectedMonthIndex = useSwiperStore((s) => s.setSelectedMonthIndex);
-  const currMonthIndex = useSwiperStore((s) => s.currMonthIndex);
-  const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
-  const emblaApi = useSwiperStore((s) => s.emblaApi);
+  const currMonthIndex = useCalendarStore((s) => s.currMonthIndex);
+  const selectedMonthIndex = useCalendarStore((s) => s.selectedMonthIndex);
   const filters = useFilterStore(useShallow(selectEventFilters));
+
+  const { goToMonth, scrollToSelectedMonthSlide } = useCalendarNavigation();
 
   const handleMonthClick = (idx: number) => {
     if (idx === selectedMonthIndex) {
-      // Месяц уже выбран — принудительно скользим к нему
-      if (emblaApi) {
-        const centerIdx = emblaApi
-          .slideNodes()
-          .findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
-        if (centerIdx !== -1) setTimeout(() => emblaApi.scrollTo(centerIdx), 50);
-      }
+      scrollToSelectedMonthSlide();
     } else {
-      setSelectedMonthIndex(idx);
+      goToMonth(idx);
     }
   };
 
