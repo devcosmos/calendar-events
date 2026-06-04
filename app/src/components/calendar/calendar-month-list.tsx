@@ -23,15 +23,17 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
   const setSelectedMonthIndex = useSwiperStore((s) => s.setSelectedMonthIndex);
   const currMonthIndex = useSwiperStore((s) => s.currMonthIndex);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
-  const swiper = useSwiperStore((s) => s.swiper);
+  const emblaApi = useSwiperStore((s) => s.emblaApi);
   const filters = useFilterStore(useShallow(selectEventFilters));
 
   const handleMonthClick = (idx: number) => {
     if (idx === selectedMonthIndex) {
       // Месяц уже выбран — принудительно скользим к нему
-      if (swiper) {
-        const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
-        if (centerIdx !== -1) setTimeout(() => swiper.slideTo(centerIdx, 300), 50);
+      if (emblaApi) {
+        const centerIdx = emblaApi
+          .slideNodes()
+          .findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
+        if (centerIdx !== -1) setTimeout(() => emblaApi.scrollTo(centerIdx), 50);
       }
     } else {
       setSelectedMonthIndex(idx);

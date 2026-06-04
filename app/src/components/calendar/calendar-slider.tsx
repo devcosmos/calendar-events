@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-import { Mousewheel } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperType } from 'swiper/types';
+import useEmblaCarousel from 'embla-carousel-react';
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 
 import CalendarMonthView from '@components/calendar/calendar-month';
 import CalendarMonthList from '@components/calendar/calendar-month-list';
@@ -37,12 +36,11 @@ export default function CalendarSlider({
   cities,
   reservoirTypes,
 }: CalendarSliderProps) {
-  const setSwiper = useSwiperStore((s) => s.setSwiper);
+  const setEmblaApi = useSwiperStore((s) => s.setEmblaApi);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
 
   const { hintForSwiping, hideHintForSwiping } = useMainStore();
 
-  const swiperRef = useRef<SwiperType | null>(null);
   const handledTargetEventIdRef = useRef<string | null>(null);
 
   const displayIndex = selectedMonthIndex ?? currentMonthIndex;
@@ -57,47 +55,91 @@ export default function CalendarSlider({
   }
 
   // Slide 0 is MonthList, then optionally prev month, then curr month
-  const initialSwiperIndex = displayIndex > 0 ? 2 : 1;
+  const centerSlideIndex = displayIndex > 0 ? 2 : 1;
 
-  const hintScroll = (swiper: SwiperType) => {
-    if (!swiper || swiper.destroyed) return;
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { axis: 'x', startIndex: centerSlideIndex, loop: false, align: 'center', dragFree: false },
+    [WheelGesturesPlugin()],
+  );
 
-    if (hintForSwiping) {
-      const initialTranslate = swiper.getTranslate();
-      const shift = initialTranslate - 50;
+  // Share embla API via store
+  useEffect(() => {
+    if (emblaApi) setEmblaApi(emblaApi);
+  }, [emblaApi, setEmblaApi]);
 
-      swiper.translateTo(shift, 400, false, true);
+  // When displayIndex changes (month re-render), reinit and re-center
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.reInit();
+    const newCenter = displayIndex > 0 ? 2 : 1;
+    setTimeout(() => emblaApi.scrollTo(newCenter, true), 0);
+  }, [displayIndex, emblaApi]);
 
+  // On slide settle: scroll the active month's current-week button into view
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSettle = () => {
+      const idx = emblaApi.selectedScrollSnap();
+      emblaApi
+        .slideNodes()
+        [idx]?.querySelector(`[${DataQuerySelector.CurrentMonthButton}]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    emblaApi.on('settle', onSettle);
+    return () => {
+      emblaApi.off('settle', onSettle);
+    };
+  }, [emblaApi]);
+
+  // Hint scroll: briefly peek at the next slide then return
+  const hintScroll = useCallback(() => {
+    if (!emblaApi || !hintForSwiping) return;
+    const container = emblaApi.containerNode();
+    const style = window.getComputedStyle(container);
+    const currentX = new DOMMatrix(style.transform).m41;
+    container.style.transition = 'transform 400ms ease';
+    container.style.transform = `translateX(${currentX - 50}px)`;
+    setTimeout(() => {
+      container.style.transform = `translateX(${currentX}px)`;
       setTimeout(() => {
-        if (!swiper || swiper.destroyed) return;
-        swiper.translateTo(initialTranslate, 400, false, true);
+        container.style.transition = '';
+        container.style.transform = '';
+        // Let embla re-apply its own transform
+        emblaApi.scrollTo(emblaApi.selectedScrollSnap(), true);
       }, 400);
-      swiper.on('slideChange', hideHintForSwiping);
-    }
-  };
+    }, 400);
+    emblaApi.on('select', hideHintForSwiping);
+  }, [emblaApi, hintForSwiping, hideHintForSwiping]);
 
   // First-load: scroll to today and show swipe hint
   useEffect(() => {
     if (!targetEventId) return;
     if (handledTargetEventIdRef.current === targetEventId) return;
 
-    const swiper = swiperRef.current;
-    if (!swiper || swiper.destroyed) return;
-    let retryTimer: ReturnType<typeof setTimeout> | null = null;
-    const getSlides = () => (swiper && !swiper.destroyed ? swiper.slides : undefined);
-
-    const centerIdx = getSlides()?.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide)) ?? -1;
+    const centerIdx =
+      emblaApi?.slideNodes().findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide)) ?? -1;
     if (centerIdx === -1) return;
 
-    const scrollToTargetEvent = (slideIndex: number): boolean => {
-      const slides = getSlides();
-      if (!slides || slideIndex < 0 || !slides[slideIndex]) return false;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
 
-      const targetElement = slides[slideIndex].querySelector(`[${DataQuerySelector.SelectedEvent}]`);
+    const scrollToTargetEvent = (slideIndex: number): boolean => {
+      const slide = emblaApi?.slideNodes()[slideIndex];
+      if (!slide) return false;
+
+      const targetElement = slide.querySelector(`[${DataQuerySelector.SelectedEvent}]`);
       if (!targetElement) return false;
 
       targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return true;
+    };
+
+    const clearTargetEventFromUrl = () => {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('eventId')) return;
+
+      url.searchParams.delete('eventId');
+      const cleanUrl = `${url.pathname}${url.search}${url.hash}`;
+      window.history.replaceState(window.history.state, '', cleanUrl);
     };
 
     const tryScrollWithRetry = (slideIndex: number, retries = 8) => {
@@ -112,112 +154,76 @@ export default function CalendarSlider({
       retryTimer = setTimeout(() => tryScrollWithRetry(slideIndex, retries - 1), 120);
     };
 
-    const clearTargetEventFromUrl = () => {
-      const url = new URL(window.location.href);
-      if (!url.searchParams.has('eventId')) return;
+    if (!emblaApi) return;
 
-      url.searchParams.delete('eventId');
-      const cleanUrl = `${url.pathname}${url.search}${url.hash}`;
-      window.history.replaceState(window.history.state, '', cleanUrl);
-    };
-
-    if (swiper.activeIndex === centerIdx) {
+    if (emblaApi.selectedScrollSnap() === centerIdx) {
       tryScrollWithRetry(centerIdx);
       return;
     }
 
-    const handleTransitionEnd = () => {
+    const handleSettle = () => {
       tryScrollWithRetry(centerIdx);
-      swiper.off('transitionEnd', handleTransitionEnd);
+      emblaApi.off('settle', handleSettle);
     };
 
-    swiper.on('transitionEnd', handleTransitionEnd);
-    swiper.slideTo(centerIdx, 300);
+    emblaApi.on('settle', handleSettle);
+    emblaApi.scrollTo(centerIdx);
 
     return () => {
-      swiper.off('transitionEnd', handleTransitionEnd);
+      emblaApi.off('settle', handleSettle);
       if (retryTimer) clearTimeout(retryTimer);
     };
-  }, [targetEventId, selectedMonthIndex]);
+  }, [targetEventId, selectedMonthIndex, emblaApi]);
 
   useEffect(() => {
     const scrollTimer = setTimeout(() => {
-      const swiper = swiperRef.current;
-      if (!swiper || swiper.destroyed || !swiper.slides) return;
-      swiper.slides[swiper.activeIndex]
-        ?.querySelector(`[${DataQuerySelector.Today}]`)
+      if (!emblaApi) return;
+      const idx = emblaApi.selectedScrollSnap();
+      emblaApi
+        .slideNodes()
+        [idx]?.querySelector(`[${DataQuerySelector.Today}]`)
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => {
-        if (swiperRef.current && !swiperRef.current.destroyed) hintScroll(swiperRef.current);
-      }, HINT_FOR_SWIPING_DELAY);
+      setTimeout(() => hintScroll(), HINT_FOR_SWIPING_DELAY);
     }, 100);
     return () => clearTimeout(scrollTimer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Swiper
-      modules={[Mousewheel]}
-      spaceBetween={10}
-      slidesPerView={1}
-      initialSlide={initialSwiperIndex}
-      className="w-full h-full"
-      mousewheel={{
-        enabled: true,
-        forceToAxis: true,
-        releaseOnEdges: true,
-        thresholdDelta: 10,
-      }}
-      onSwiper={(s) => {
-        setSwiper(s);
-        swiperRef.current = s;
-      }}
-      onSlidesUpdated={(swiper) => {
-        if (!swiper || swiper.destroyed || !swiper.slides) return;
-        const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
-        if (centerIdx === -1) return;
-        // slideTo is a no-op if already at centerIdx (initial load), animates otherwise
-        setTimeout(() => swiper.slideTo(centerIdx, 300), 50);
-      }}
-      onSlideChangeTransitionEnd={(swiper) => {
-        if (!swiper || swiper.destroyed || !swiper.slides) return;
-        // Скролл на первом и последнем слайде до текущей недели
-        swiper.slides[swiper.activeIndex]
-          .querySelector(`[${DataQuerySelector.CurrentMonthButton}]`)
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }}
-    >
-      {/* Left edge: month list */}
-      <SwiperSlide className="h-auto">
-        <CalendarSliderContainer>
-          <CalendarMonthList months={months} />
-        </CalendarSliderContainer>
-      </SwiperSlide>
-
-      {/* Slides: prev / curr / next */}
-      {visibleSlides.map(({ month, index }) => (
-        <SwiperSlide
-          className="h-auto"
-          key={`${month.year}-${month.month}`}
-          {...(index === displayIndex && { [DataQuerySelector.SelectedMonthSlide]: '' })}
-        >
+    <div ref={emblaRef} className="w-full h-full overflow-hidden">
+      <div className="flex h-full">
+        {/* Left edge: month list */}
+        <div className="flex-[0_0_100%] h-auto min-w-0">
           <CalendarSliderContainer>
-            <CalendarMonthView
-              month={month}
-              targetEventId={targetEventId}
-              monthIndex={index}
-              currentMonthIndex={currentMonthIndex}
-            />
+            <CalendarMonthList months={months} />
           </CalendarSliderContainer>
-        </SwiperSlide>
-      ))}
+        </div>
 
-      {/* Right edge: filter panel */}
-      <SwiperSlide className="h-auto">
-        <CalendarSliderContainer>
-          <FilterPanel companies={companies} cities={cities} reservoirTypes={reservoirTypes} />
-        </CalendarSliderContainer>
-      </SwiperSlide>
-    </Swiper>
+        {/* Slides: prev / curr / next */}
+        {visibleSlides.map(({ month, index }) => (
+          <div
+            className="flex-[0_0_100%] h-auto min-w-0"
+            key={`${month.year}-${month.month}`}
+            {...(index === displayIndex && { [DataQuerySelector.SelectedMonthSlide]: '' })}
+          >
+            <CalendarSliderContainer>
+              <CalendarMonthView
+                month={month}
+                targetEventId={targetEventId}
+                monthIndex={index}
+                currentMonthIndex={currentMonthIndex}
+              />
+            </CalendarSliderContainer>
+          </div>
+        ))}
+
+        {/* Right edge: filter panel */}
+        <div className="flex-[0_0_100%] h-auto min-w-0">
+          <CalendarSliderContainer>
+            <FilterPanel companies={companies} cities={cities} reservoirTypes={reservoirTypes} />
+          </CalendarSliderContainer>
+        </div>
+      </div>
+    </div>
   );
 }

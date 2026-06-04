@@ -11,7 +11,6 @@ import { Filter } from '@components/icon/outline';
 import { selectHasActiveFilters, useFilterStore } from '@store/filterStore';
 import { useSwiperStore } from '@store/swiperStore';
 
-import { DataQuerySelector } from '@utils/consts';
 import { CalendarMonth } from '@utils/types';
 
 interface CalendarHeaderProps {
@@ -19,55 +18,13 @@ interface CalendarHeaderProps {
 }
 
 export default function CalendarHeader({ months }: CalendarHeaderProps) {
-  const swiper = useSwiperStore((s) => s.swiper);
+  const emblaApi = useSwiperStore((s) => s.emblaApi);
   const currMonthIndex = useSwiperStore((s) => s.currMonthIndex);
   const selectedMonthIndex = useSwiperStore((s) => s.selectedMonthIndex);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const hasActiveFilters = useFilterStore(selectHasActiveFilters);
   const clearFilters = useFilterStore((s) => s.clearFilters);
-
-  const slideToCenterMonth = () => {
-    if (!swiper) return;
-
-    const centerIdx = swiper.slides.findIndex((slide) => slide.hasAttribute(DataQuerySelector.SelectedMonthSlide));
-    swiper.slideTo(centerIdx !== -1 ? centerIdx : 1);
-  };
-
-  const handleMonthButtonClick = () => {
-    if (!swiper) return;
-
-    if (activeIndex === 0) {
-      slideToCenterMonth();
-    } else {
-      swiper.slideTo(0);
-    }
-  };
-
-  const handleFilterButtonClick = () => {
-    if (!swiper) return;
-
-    const lastIdx = swiper.slides.length - 1;
-
-    if (activeIndex === lastIdx) {
-      slideToCenterMonth();
-    } else {
-      swiper.slideTo(lastIdx);
-    }
-  };
-
-  useEffect(() => {
-    if (!swiper) return;
-
-    const updateActive = () => setActiveIndex(swiper.activeIndex);
-
-    swiper.on('activeIndexChange', updateActive);
-    updateActive();
-
-    return () => {
-      swiper.off('activeIndexChange', updateActive);
-    };
-  }, [swiper]);
 
   // Mirror the same visible slice as CalendarSlider
   const displayIdx = selectedMonthIndex ?? currMonthIndex ?? 0;
@@ -76,7 +33,51 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
   visibleIndices.push(displayIdx);
   if (displayIdx < months.length - 1) visibleIndices.push(displayIdx + 1);
 
-  // slide 0 = left list, slides 1..N = months, slide N+1 = right list → show current month on lists
+  // slide 0 = list, slides 1..N = months, slide N+1 = filter
+  const totalSlides = visibleIndices.length + 2;
+  const centerSlideIndex = displayIdx > 0 ? 2 : 1;
+
+  const slideToCenterMonth = () => {
+    if (!emblaApi) return;
+    emblaApi.scrollTo(centerSlideIndex);
+  };
+
+  const handleMonthButtonClick = () => {
+    if (!emblaApi) return;
+
+    if (activeIndex === 0) {
+      slideToCenterMonth();
+    } else {
+      emblaApi.scrollTo(0);
+    }
+  };
+
+  const handleFilterButtonClick = () => {
+    if (!emblaApi) return;
+
+    const lastIdx = totalSlides - 1;
+
+    if (activeIndex === lastIdx) {
+      slideToCenterMonth();
+    } else {
+      emblaApi.scrollTo(lastIdx);
+    }
+  };
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const updateActive = () => setActiveIndex(emblaApi.selectedScrollSnap());
+
+    emblaApi.on('select', updateActive);
+    updateActive();
+
+    return () => {
+      emblaApi.off('select', updateActive);
+    };
+  }, [emblaApi]);
+
+  // slide 0 = list, slides 1..N = months, slide N+1 = filter → show current month on lists
   const isOnList = activeIndex === 0 || activeIndex > visibleIndices.length;
   const monthIdx = isOnList ? (currMonthIndex ?? 0) : visibleIndices[activeIndex - 1];
 
