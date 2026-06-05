@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import useEmblaCarousel from 'embla-carousel-react';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
@@ -11,7 +11,6 @@ import CalendarSliderContainer from '@components/calendar/calendar-slider-contai
 import { FilterPanel } from '@components/filter';
 
 import { useCalendarStore } from '@store/calendarStore';
-import { useMainStore } from '@store/mainStore';
 
 import { DataQuerySelector } from '@utils/consts';
 import { ReservoirType } from '@utils/eventFilter';
@@ -26,7 +25,25 @@ interface CalendarSliderProps {
   reservoirTypes: { id: ReservoirType; label: string }[];
 }
 
-const HINT_DELAY = 3000;
+/**
+ * Scroll the CalendarSliderContainer (the overflow-y-auto div) inside a slide
+ * to center the element matching `selector`. Uses scrollTop directly — never
+ * calls scrollIntoView, which would bubble up through Embla's overflow:hidden
+ * viewport and corrupt horizontal position.
+ */
+function scrollSlideToSelector(slideEl: Element | undefined | null, selector: string): boolean {
+  if (!slideEl) return false;
+  // CalendarSliderContainer is the direct child of the slide div
+  const container = slideEl.firstElementChild as HTMLElement | null;
+  const target = slideEl.querySelector(`[${selector}]`) as HTMLElement | null;
+  if (!container || !target) return false;
+
+  const containerHeight = container.clientHeight;
+  const targetOffsetTop = target.offsetTop;
+  const targetHeight = target.offsetHeight;
+  container.scrollTop = targetOffsetTop - containerHeight / 2 + targetHeight / 2;
+  return true;
+}
 
 export default function CalendarSlider({
   months,
@@ -38,21 +55,6 @@ export default function CalendarSlider({
 }: CalendarSliderProps) {
   const setEmblaApi = useCalendarStore((s) => s.setEmblaApi);
   const selectedMonthIndex = useCalendarStore((s) => s.selectedMonthIndex);
-  const pendingScrollSelector = useCalendarStore((s) => s.pendingScrollSelector);
-  const setPendingScrollSelector = useCalendarStore((s) => s.setPendingScrollSelector);
-
-  const { hintForSwiping, hideHintForSwiping } = useMainStore();
-
-  const handledTargetEventIdRef = useRef<string | null>(null);
-  // Always-fresh ref so stable event handlers can read pendingScrollSelector
-  // without needing it in their dependency arrays
-  const pendingRef = useRef<string | null>(null);
-  pendingRef.current = pendingScrollSelector;
-
-  // Set to true in Effect #2 when reInit fires; reset to false at render top.
-  // Effect #2b reads this to know if reInit already positioned the carousel.
-  const reinitThisRenderRef = useRef(false);
-  reinitThisRenderRef.current = false;
 
   const displayIndex = selectedMonthIndex ?? currentMonthIndex;
   const centerSlideIndex = displayIndex > 0 ? 2 : 1;
@@ -65,141 +67,60 @@ export default function CalendarSlider({
       visibleSlides.push({ month: months[displayIndex + 1], index: displayIndex + 1 });
   }
 
-  const prevSlideCountRef = useRef(visibleSlides.length + 2);
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({ startIndex: centerSlideIndex, loop: false, align: 'center' }, [
-    WheelGesturesPlugin(),
-  ]);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { startIndex: centerSlideIndex, loop: false, align: 'center' },
+    [WheelGesturesPlugin()],
+  );
 
   // ── 1. Register API in store ───────────────────────────────────────────────
   useEffect(() => {
     if (emblaApi) setEmblaApi(emblaApi);
   }, [emblaApi, setEmblaApi]);
 
-  // ── 2. Navigate to center when displayIndex changes ──────────────────────
-  //  Always reInit so Embla picks up fresh DOM nodes (keys changed).
-  //  startIndex snaps instantly to center — no animation, no settle, no race.
+  // ── 2. When selected month changes, reInit so Embla picks up new DOM nodes,
+  //  then scroll the center slide to today.
   useEffect(() => {
     if (!emblaApi) return;
-    reinitThisRenderRef.current = true;
-    const center = displayIndex > 0 ? 2 : 1;
-    prevSlideCountRef.current = visibleSlides.length + 2;
-    emblaApi.reInit({ startIndex: center });
-  }, [displayIndex, emblaApi, visibleSlides.length]);
+    emblaApi.reInit({ startIndex: centerSlideIndex });
+    // After reInit the carousel is at centerSlideIndex. Scroll to today.
+    scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
+  }, [displayIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── 2b. Execute pending scroll selector ───────────────────────────────────
-  //  Case A — reInit just ran: carousel is already at center, scroll now.
-  //    (reInit doesn't fire 'settle', so we can't rely on effect #3 here.)
-  //  Case B — reInit did NOT run (displayIndex unchanged, e.g. user taps
-  //    "today" while on list/filter for the same month): animate to center
-  //    via scrollTo; effect #3's onSettle will execute via pendingRef.
-  useEffect(() => {
-    if (!emblaApi || !pendingScrollSelector) return;
-    const center = displayIndex > 0 ? 2 : 1;
-
-    const executeScrollNow = () => {
-      pendingRef.current = null; // clear immediately so settle doesn't double-fire
-      emblaApi
-        .slideNodes()
-        [center]?.querySelector(`[${pendingScrollSelector}]`)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setPendingScrollSelector(null);
-    };
-
-    if (reinitThisRenderRef.current) {
-      // reInit already positioned the carousel at center
-      executeScrollNow();
-      return;
-    }
-
-    const snap = emblaApi.selectedScrollSnap();
-    if (snap === center) {
-      executeScrollNow();
-    } else {
-      // Navigate; onSettle (effect #3) will scroll via pendingRef
-      emblaApi.scrollTo(center);
-    }
-  }, [pendingScrollSelector, emblaApi, displayIndex, setPendingScrollSelector]);
-
-  // ── 3. On settle: execute pending scroll or default (current-month button) ─
+  // ── 3. Initial load: scroll to today in the starting slide ────────────────
   useEffect(() => {
     if (!emblaApi) return;
-    const onSettle = () => {
-      const idx = emblaApi.selectedScrollSnap();
-      const slide = emblaApi.slideNodes()[idx];
-      const pending = pendingRef.current;
+    scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emblaApi]);
 
-      if (pending) {
-        slide?.querySelector(`[${pending}]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setPendingScrollSelector(null);
-      } else {
-        slide
-          ?.querySelector(`[${DataQuerySelector.CurrentMonthButton}]`)
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    };
-    emblaApi.on('settle', onSettle);
-    return () => {
-      emblaApi.off('settle', onSettle);
-    };
-  }, [emblaApi, setPendingScrollSelector]);
-
-  // ── 4. Initial load: scroll to today + swipe hint ─────────────────────────
+  // ── 4. Deep link: scroll to a specific event card ─────────────────────────
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!emblaApi) return;
-      const idx = emblaApi.selectedScrollSnap();
-      emblaApi
-        .slideNodes()
-        [idx]?.querySelector(`[${DataQuerySelector.Today}]`)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!emblaApi || !targetEventId) return;
 
-      if (!hintForSwiping) return;
-      setTimeout(() => {
-        const container = emblaApi.containerNode();
-        const currentX = new DOMMatrix(window.getComputedStyle(container).transform).m41;
-        container.style.transition = 'transform 400ms ease';
-        container.style.transform = `translateX(${currentX - 50}px)`;
-        setTimeout(() => {
-          container.style.transform = `translateX(${currentX}px)`;
-          setTimeout(() => {
-            container.style.transition = '';
-            container.style.transform = '';
-            emblaApi.scrollTo(emblaApi.selectedScrollSnap(), true);
-          }, 400);
-        }, 400);
-        emblaApi.on('select', hideHintForSwiping);
-      }, HINT_DELAY);
-    }, 100);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // ── 5. Deep link: scroll to a specific event card ─────────────────────────
-  useEffect(() => {
-    if (!emblaApi || !targetEventId || handledTargetEventIdRef.current === targetEventId) return;
-
-    const centerIdx = emblaApi.slideNodes().findIndex((s) => s.hasAttribute(DataQuerySelector.SelectedMonthSlide));
+    const centerIdx = emblaApi
+      .slideNodes()
+      .findIndex((s) => s.hasAttribute(DataQuerySelector.SelectedMonthSlide));
     if (centerIdx === -1) return;
 
     let retryTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const tryScroll = (retries = 8): void => {
-      const el = emblaApi.slideNodes()[centerIdx]?.querySelector(`[${DataQuerySelector.SelectedEvent}]`);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        clearEventIdFromUrl();
-        handledTargetEventIdRef.current = targetEventId;
-        return;
-      }
-      if (retries > 0) retryTimer = setTimeout(() => tryScroll(retries - 1), 120);
-    };
 
     const clearEventIdFromUrl = () => {
       const url = new URL(window.location.href);
       if (!url.searchParams.has('eventId')) return;
       url.searchParams.delete('eventId');
       window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+    };
+
+    const tryScroll = (retries = 8): void => {
+      const slid = emblaApi.slideNodes()[centerIdx];
+      const container = slid?.firstElementChild as HTMLElement | null;
+      const el = slid?.querySelector(`[${DataQuerySelector.SelectedEvent}]`) as HTMLElement | null;
+      if (container && el) {
+        container.scrollTop = el.offsetTop - container.clientHeight / 2 + el.offsetHeight / 2;
+        clearEventIdFromUrl();
+        return;
+      }
+      if (retries > 0) retryTimer = setTimeout(() => tryScroll(retries - 1), 120);
     };
 
     if (emblaApi.selectedScrollSnap() === centerIdx) {
