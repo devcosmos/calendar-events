@@ -67,10 +67,9 @@ export default function CalendarSlider({
       visibleSlides.push({ month: months[displayIndex + 1], index: displayIndex + 1 });
   }
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { startIndex: centerSlideIndex, loop: false, align: 'center' },
-    [WheelGesturesPlugin()],
-  );
+  const [emblaRef, emblaApi] = useEmblaCarousel({ startIndex: centerSlideIndex, loop: false, align: 'center' }, [
+    WheelGesturesPlugin(),
+  ]);
 
   // ── 1. Register API in store ───────────────────────────────────────────────
   useEffect(() => {
@@ -90,16 +89,14 @@ export default function CalendarSlider({
   useEffect(() => {
     if (!emblaApi) return;
     scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emblaApi]);
 
   // ── 4. Deep link: scroll to a specific event card ─────────────────────────
   useEffect(() => {
     if (!emblaApi || !targetEventId) return;
 
-    const centerIdx = emblaApi
-      .slideNodes()
-      .findIndex((s) => s.hasAttribute(DataQuerySelector.SelectedMonthSlide));
+    const centerIdx = emblaApi.slideNodes().findIndex((s) => s.hasAttribute(DataQuerySelector.SelectedMonthSlide));
     if (centerIdx === -1) return;
 
     let retryTimer: ReturnType<typeof setTimeout> | null = null;
@@ -132,6 +129,11 @@ export default function CalendarSlider({
       };
       emblaApi.on('settle', onSettle);
       emblaApi.scrollTo(centerIdx);
+
+      return () => {
+        void emblaApi.off('settle', onSettle);
+        if (retryTimer) clearTimeout(retryTimer);
+      };
     }
 
     return () => {

@@ -8,10 +8,10 @@ import { ru } from 'date-fns/locale';
 import Button from '@components/button/button';
 import { Filter } from '@components/icon/outline';
 
+import { useCalendarNavigation } from '@hooks/useCalendarNavigation';
+
 import { useCalendarStore } from '@store/calendarStore';
 import { selectHasActiveFilters, useFilterStore } from '@store/filterStore';
-
-import { useCalendarNavigation } from '@hooks/useCalendarNavigation';
 
 import { CalendarMonth } from '@utils/types';
 
@@ -46,10 +46,12 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
 
   useEffect(() => {
     if (!emblaApi) return;
+
     const update = () => setActiveSlideIndex(emblaApi.selectedScrollSnap());
     emblaApi.on('select', update);
     update();
-    return () => emblaApi.off('select', update);
+
+    return () => void emblaApi.off('select', update);
   }, [emblaApi]);
 
   // Determine which month name to display in the header button
