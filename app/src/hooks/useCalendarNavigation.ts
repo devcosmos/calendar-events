@@ -78,6 +78,7 @@ export const useCalendarNavigation = () => {
   /** Open the filter panel (rightmost slide) */
   const openFilterPanel = useCallback(() => {
     if (!emblaApi) return;
+
     emblaApi.scrollTo(emblaApi.slideNodes().length - 1);
   }, [emblaApi]);
 
