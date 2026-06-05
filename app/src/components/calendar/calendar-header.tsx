@@ -54,6 +54,15 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
     return () => void emblaApi.off('select', update);
   }, [emblaApi]);
 
+  // Update activeSlideIndex when month selection changes
+  useEffect(() => {
+    if (!emblaApi || selectedMonthIndex === null) return;
+
+    const displayIdx = selectedMonthIndex;
+    const centerSlideIndex = displayIdx > 0 ? 2 : 1;
+    setActiveSlideIndex(centerSlideIndex);
+  }, [selectedMonthIndex, emblaApi]);
+
   // Determine which month name to display in the header button
   const displayIdx = selectedMonthIndex ?? currMonthIndex ?? 0;
   const visibleMonthIndices: number[] = [];
