@@ -80,14 +80,15 @@ export default function CalendarSlider({
   //  then scroll the center slide to today.
   useEffect(() => {
     if (!emblaApi) return;
+
     emblaApi.reInit({ startIndex: centerSlideIndex });
-    // After reInit the carousel is at centerSlideIndex. Scroll to today.
     scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
   }, [displayIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── 3. Initial load: scroll to today in the starting slide ────────────────
   useEffect(() => {
     if (!emblaApi) return;
+
     scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emblaApi]);
