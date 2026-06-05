@@ -6,7 +6,7 @@ import { Calendar, CircleUser, Mark } from '@components/icon/bold';
 import { Magnifier } from '@components/icon/outline';
 import TapBarButton from '@components/tab-bar/tap-bar-button';
 
-import { useTabBarEvents } from '@hooks/tab-bar/useTabBarEvents';
+import { useTabBarEvents } from '@hooks/useTabBarEvents';
 
 import { AppRoute, DataQuerySelector, TabBarButton } from '@utils/consts';
 
