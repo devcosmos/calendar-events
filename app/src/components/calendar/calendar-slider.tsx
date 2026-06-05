@@ -145,36 +145,29 @@ export default function CalendarSlider({
     <div ref={emblaRef} className="w-full h-full overflow-hidden">
       <div className="flex h-full">
         {/* Left edge: month list */}
-        <div className="flex-[0_0_100%] h-auto min-w-0">
-          <CalendarSliderContainer>
-            <CalendarMonthList months={months} />
-          </CalendarSliderContainer>
-        </div>
+        <CalendarSliderContainer>
+          <CalendarMonthList months={months} />
+        </CalendarSliderContainer>
 
         {/* Slides: prev / curr / next */}
         {visibleSlides.map(({ month, index }) => (
-          <div
-            className="flex-[0_0_100%] h-auto min-w-0"
+          <CalendarSliderContainer
             key={`${month.year}-${month.month}`}
             {...(index === displayIndex && { [DataQuerySelector.SelectedMonthSlide]: '' })}
           >
-            <CalendarSliderContainer>
-              <CalendarMonthView
-                month={month}
-                targetEventId={targetEventId}
-                monthIndex={index}
-                currentMonthIndex={currentMonthIndex}
-              />
-            </CalendarSliderContainer>
-          </div>
+            <CalendarMonthView
+              month={month}
+              targetEventId={targetEventId}
+              monthIndex={index}
+              currentMonthIndex={currentMonthIndex}
+            />
+          </CalendarSliderContainer>
         ))}
 
         {/* Right edge: filter panel */}
-        <div className="flex-[0_0_100%] h-auto min-w-0">
-          <CalendarSliderContainer>
-            <FilterPanel companies={companies} cities={cities} reservoirTypes={reservoirTypes} />
-          </CalendarSliderContainer>
-        </div>
+        <CalendarSliderContainer>
+          <FilterPanel companies={companies} cities={cities} reservoirTypes={reservoirTypes} />
+        </CalendarSliderContainer>
       </div>
     </div>
   );
