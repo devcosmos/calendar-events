@@ -62,12 +62,18 @@ export const useCalendarNavigation = () => {
   /** Scroll the carousel to the slide that carries [data-selected-month-slide] */
   const scrollToSelectedMonthSlide = useCallback(() => {
     if (!emblaApi) return;
+
     const idx = emblaApi.slideNodes().findIndex((s) => s.hasAttribute(DataQuerySelector.SelectedMonthSlide));
     if (idx !== -1) emblaApi.scrollTo(idx);
   }, [emblaApi]);
 
   /** Open the month list panel (leftmost slide) */
-  const openMonthList = useCallback(() => emblaApi?.scrollTo(0), [emblaApi]);
+  const openMonthList = useCallback(() => {
+    if (!emblaApi) return;
+
+    emblaApi.scrollTo(0);
+    scrollSlideToSelector(emblaApi.slideNodes()[0], DataQuerySelector.CurrentMonthButton);
+  }, [emblaApi]);
 
   /** Open the filter panel (rightmost slide) */
   const openFilterPanel = useCallback(() => {
