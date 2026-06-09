@@ -11,9 +11,14 @@ import { CalendarMonth, SwimEvent } from '@utils/types';
  * @param slideEl — корневой элемент слайда; прямым потомком должен быть
  *   скроллируемый контейнер (`CalendarSliderContainer`).
  * @param selector — имя data-атрибута без скобок, например `"data-today"`.
+ * @param behavior — поведение скролла: `"instant"` (по умолчанию) или `"smooth"`.
  * @returns `true`, если скролл выполнен; `false`, если элемент не найден.
  */
-export function scrollSlideToSelector(slideEl: Element | undefined | null, selector: string): boolean {
+export function scrollSlideToSelector(
+  slideEl: Element | undefined | null,
+  selector: string,
+  behavior: ScrollBehavior = 'instant',
+): boolean {
   if (!slideEl) return false;
 
   const container = slideEl.firstElementChild as HTMLElement | null;
@@ -21,7 +26,10 @@ export function scrollSlideToSelector(slideEl: Element | undefined | null, selec
 
   if (!container || !target) return false;
 
-  container.scrollTop = target.offsetTop - container.clientHeight / 2 + target.offsetHeight / 2;
+  container.scrollTo({
+    top: target.offsetTop - container.clientHeight / 2 + target.offsetHeight / 2,
+    behavior,
+  });
 
   return true;
 }
