@@ -44,7 +44,7 @@ export default function ActionButton({
       {value ? (
         <span className="text-tg-link-color text-end whitespace-nowrap">{value}</span>
       ) : (
-        <ArrowRight className={cn('-me-1.5 fill-tg-button-text-color')} />
+        <ArrowRight className="size-6 -me-1.5 fill-tg-button-text-color" />
       )}
     </>
   );
