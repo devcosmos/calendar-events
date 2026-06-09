@@ -2,17 +2,8 @@ import { useCallback } from 'react';
 
 import { useCalendarStore } from '@store/calendarStore';
 
+import { scrollSlideToSelector } from '@utils/calendarHelper';
 import { DataQuerySelector } from '@utils/consts';
-
-/** Scroll the CalendarSliderContainer inside a slide to center a selector match. */
-function scrollSlideToSelector(slideEl: Element | undefined | null, selector: string): boolean {
-  if (!slideEl) return false;
-  const container = slideEl.firstElementChild as HTMLElement | null;
-  const target = slideEl.querySelector(`[${selector}]`) as HTMLElement | null;
-  if (!container || !target) return false;
-  container.scrollTop = target.offsetTop - container.clientHeight / 2 + target.offsetHeight / 2;
-  return true;
-}
 
 export const useCalendarNavigation = () => {
   const emblaApi = useCalendarStore((s) => s.emblaApi);

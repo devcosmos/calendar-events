@@ -12,6 +12,7 @@ import { FilterPanel } from '@components/filter';
 
 import { useCalendarStore } from '@store/calendarStore';
 
+import { scrollSlideToSelector } from '@utils/calendarHelper';
 import { DataQuerySelector } from '@utils/consts';
 import { ReservoirType } from '@utils/eventFilter';
 import { CalendarMonth } from '@utils/types';
@@ -23,26 +24,6 @@ interface CalendarSliderProps {
   companies: string[];
   cities: string[];
   reservoirTypes: { id: ReservoirType; label: string }[];
-}
-
-/**
- * Scroll the CalendarSliderContainer (the overflow-y-auto div) inside a slide
- * to center the element matching `selector`. Uses scrollTop directly — never
- * calls scrollIntoView, which would bubble up through Embla's overflow:hidden
- * viewport and corrupt horizontal position.
- */
-function scrollSlideToSelector(slideEl: Element | undefined | null, selector: string): boolean {
-  if (!slideEl) return false;
-  // CalendarSliderContainer is the direct child of the slide div
-  const container = slideEl.firstElementChild as HTMLElement | null;
-  const target = slideEl.querySelector(`[${selector}]`) as HTMLElement | null;
-  if (!container || !target) return false;
-
-  const containerHeight = container.clientHeight;
-  const targetOffsetTop = target.offsetTop;
-  const targetHeight = target.offsetHeight;
-  container.scrollTop = targetOffsetTop - containerHeight / 2 + targetHeight / 2;
-  return true;
 }
 
 export default function CalendarSlider({

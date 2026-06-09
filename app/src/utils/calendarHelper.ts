@@ -1,6 +1,32 @@
 import { CalendarMonth, SwimEvent } from '@utils/types';
 
 /**
+ * Вертикально скроллит контейнер слайда к элементу с заданным data-атрибутом,
+ * центрируя его в области видимости.
+ *
+ * Использует `scrollTop` напрямую — в обход `scrollIntoView`, который
+ * пробрасывается сквозь `overflow:hidden` вьюпорта Embla и ломает
+ * горизонтальное положение карусели.
+ *
+ * @param slideEl — корневой элемент слайда; прямым потомком должен быть
+ *   скроллируемый контейнер (`CalendarSliderContainer`).
+ * @param selector — имя data-атрибута без скобок, например `"data-today"`.
+ * @returns `true`, если скролл выполнен; `false`, если элемент не найден.
+ */
+export function scrollSlideToSelector(slideEl: Element | undefined | null, selector: string): boolean {
+  if (!slideEl) return false;
+
+  const container = slideEl.firstElementChild as HTMLElement | null;
+  const target = slideEl.querySelector(`[${selector}]`) as HTMLElement | null;
+
+  if (!container || !target) return false;
+
+  container.scrollTop = target.offsetTop - container.clientHeight / 2 + target.offsetHeight / 2;
+
+  return true;
+}
+
+/**
  * Возвращает число с существительным в правильной форме для русского языка.
  * @param n - Число
  * @param one - Форма для 1 (например, «событие»)
