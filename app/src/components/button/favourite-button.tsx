@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import { postEvent } from '@tma.js/sdk-react';
 import clsx from 'clsx';
 
-import Button from '@components/button/button';
 import { Mark } from '@components/icon/outline';
 
 import { useFavouritesStore } from '@store/favouritesStore';
@@ -47,9 +46,11 @@ export default function FavouriteButton({ SwimEvent, size = ButtonSize.Base }: F
   };
 
   return (
-    <Button
+    <button
       className={clsx(
-        'bg-tg-section-bg-color border-tg-section-bg-color text-sm !w-auto z-10 relative',
+        'bg-tg-section-bg-color border-tg-section-bg-color',
+        'w-auto z-10 relative',
+        'flex items-center justify-center',
         '!p-4 -mx-2.5 -mb-2.5',
       )}
       onClick={handleFavouriteButtonClick}
@@ -57,6 +58,6 @@ export default function FavouriteButton({ SwimEvent, size = ButtonSize.Base }: F
       <span ref={starRef} className="origin-center will-change-transform -ms-px">
         <Mark className={clsx('group', size === ButtonSize.Medium && 'size-6', isFavouriteEntity && 'scaling')} />
       </span>
-    </Button>
+    </button>
   );
 }
