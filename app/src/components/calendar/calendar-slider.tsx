@@ -116,20 +116,21 @@ export default function CalendarSlider({
 
     const clearEventIdFromUrl = () => {
       const url = new URL(window.location.href);
+
       if (!url.searchParams.has('eventId')) return;
+
       url.searchParams.delete('eventId');
       window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
     };
 
     const tryScroll = (retries = 8): void => {
       const slid = emblaApi.slideNodes()[centerIdx];
-      const container = slid?.firstElementChild as HTMLElement | null;
-      const el = slid?.querySelector(`[${DataQuerySelector.SelectedEvent}]`) as HTMLElement | null;
-      if (container && el) {
-        container.scrollTop = el.offsetTop - container.clientHeight / 2 + el.offsetHeight / 2;
+      if (scrollSlideToSelector(slid, DataQuerySelector.SelectedEvent, 'smooth')) {
         clearEventIdFromUrl();
+
         return;
       }
+
       if (retries > 0) retryTimer = setTimeout(() => tryScroll(retries - 1), 120);
     };
 
