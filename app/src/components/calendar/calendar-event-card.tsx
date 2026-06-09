@@ -10,7 +10,6 @@ import { Locale } from '@core/i18n/config';
 
 import { useMainStore } from '@store/mainStore';
 
-import { nbsp } from '@utils/calendarHelper';
 import { DataQuerySelector } from '@utils/consts';
 import { SwimEvent } from '@utils/types';
 
@@ -61,10 +60,10 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
         <h3 className={clsx('text-lg leading-tight mb-2', isEventPassed && !isTargetEvent && 'text-tg-hint-color')}>
           {event.registration_url ? (
             <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
-              {nbsp(event.name)}
+              {event.name}
             </a>
           ) : (
-            nbsp(event.name)
+            event.name
           )}
         </h3>
         {event.location.map_url ? (

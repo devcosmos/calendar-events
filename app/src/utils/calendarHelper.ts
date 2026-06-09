@@ -34,19 +34,6 @@ export function scrollSlideToSelector(slideEl: Element | undefined | null, selec
  * @param many - Форма для 5+ (например, «событий»)
  * @example plural(21, 'яблоко', 'яблока', 'яблок') → "21 яблоко"
  */
-export function nbsp(text: string): string {
-  const NBSP = '\u00A0';
-  const words = text.split(' ');
-  const result: string[] = [];
-  for (let i = 0; i < words.length; i++) {
-    result.push(words[i]);
-    if (i < words.length - 1) {
-      result.push(words[i].length <= 3 ? NBSP : ' ');
-    }
-  }
-  return result.join('');
-}
-
 export function plural(n: number, one: string, few: string, many: string): string {
   const mod10 = n % 10;
   const mod100 = n % 100;
