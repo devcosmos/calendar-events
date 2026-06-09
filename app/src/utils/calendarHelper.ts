@@ -27,24 +27,12 @@ export function scrollSlideToSelector(slideEl: Element | undefined | null, selec
 }
 
 /**
- * Возвращает число с существительным в правильной форме для русского языка.
- * @param n - Число
- * @param one - Форма для 1 (например, «событие»)
- * @param few - Форма для 2–4 (например, «события»)
- * @param many - Форма для 5+ (например, «событий»)
- * @example plural(21, 'яблоко', 'яблока', 'яблок') → "21 яблоко"
- */
-export function plural(n: number, one: string, few: string, many: string): string {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod100 >= 11 && mod100 <= 14) return `${n} ${many}`;
-  if (mod10 === 1) return `${n} ${one}`;
-  if (mod10 >= 2 && mod10 <= 4) return `${n} ${few}`;
-  return `${n} ${many}`;
-}
-
-/**
- * Группирует события по месяцам, формируя полный список из 12 месяцев для каждого года.
+ * Группирует события по месяцам и заполняет все 12 месяцев для каждого года,
+ * в котором есть хотя бы одно событие. Даты интерпретируются по московскому времени.
+ *
+ * @param events — плоский массив событий `SwimEvent`.
+ * @returns отсортированный по возрастанию массив `CalendarMonth`; месяцы без событий
+ *   включены с пустым массивом `events`.
  */
 export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
   const monthMap = new Map<string, CalendarMonth>();
@@ -81,8 +69,12 @@ export function groupEventsByMonth(events: SwimEvent[]): CalendarMonth[] {
 }
 
 /**
- * Возвращает индекс текущего месяца в массиве CalendarMonth.
- * Если текущий месяц не найден — возвращает индекс ближайшего будущего месяца.
+ * Находит индекс текущего месяца в массиве `CalendarMonth`.
+ * Если текущий месяц отсутствует, возвращает ближайший будущий;
+ * если будущих нет — последний элемент массива.
+ *
+ * @param months — отсортированный массив месяцев, как правило результат `groupEventsByMonth`.
+ * @returns числовой индекс в переданном массиве; `0` для пустого массива.
  */
 export function getCurrentMonthIndex(months: CalendarMonth[]): number {
   if (months.length === 0) return 0;

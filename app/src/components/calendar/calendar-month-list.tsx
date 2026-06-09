@@ -12,9 +12,9 @@ import { useCalendarNavigation } from '@hooks/useCalendarNavigation';
 import { useCalendarStore } from '@store/calendarStore';
 import { selectEventFilters, useFilterStore } from '@store/filterStore';
 
-import { plural } from '@utils/calendarHelper';
 import { DataQuerySelector } from '@utils/consts';
 import { filterEventsByFilters } from '@utils/eventFilter';
+import { plural } from '@utils/helper';
 import { CalendarMonth } from '@utils/types';
 
 interface CalendarMonthListProps {
