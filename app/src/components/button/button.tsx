@@ -33,9 +33,7 @@ export default function Button({
     <>
       {children}
       {addIcon && (
-        <ArrowRight
-          className={clsx('!size-4 -me-1.5', outline ? '!fill-tg-link-color' : '!fill-tg-button-text-color')}
-        />
+        <ArrowRight className={clsx('!size-5 -me-2', outline ? '!fill-tg-link-color' : '!fill-tg-button-text-color')} />
       )}
     </>
   );

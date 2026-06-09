@@ -47,11 +47,11 @@ export default function SearchOption({
           </div>
         )}
         <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">{entity.name}</span>
-        {!isEmptyQuery && <ArrowRight className="!size-4" />}
+        {!isEmptyQuery && <ArrowRight className="!size-5" />}
       </ComboboxOption>
       {isEmptyQuery && isSearchPage && (
         <button className="bg-transparent border-0 p-3 flex-shrink-0" onClick={() => removeSearchHistoryItem(entity)}>
-          <Close className="!size-4" />
+          <Close className="!size-5" />
         </button>
       )}
       <div
