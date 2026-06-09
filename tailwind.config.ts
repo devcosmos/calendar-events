@@ -41,6 +41,10 @@ const config: Config = {
           '0%, 80%, 100%': { transform: 'scale(1)' },
           '40%': { transform: 'scale(0.7)' },
         },
+        scalingSmall: {
+          '0%, 80%, 100%': { transform: 'scale(1)' },
+          '40%': { transform: 'scale(0.9)' },
+        },
       },
     },
   },

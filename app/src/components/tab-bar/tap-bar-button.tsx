@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import Link from 'next/link';
 
 import { postEvent } from '@tma.js/sdk-react';
@@ -22,16 +24,29 @@ export default function TapBarButton({
   children,
   ...rest
 }: TapBarButtonProps) {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  const handleMouseDown = () => {
+    postEvent('web_app_trigger_haptic_feedback', { type: 'selection_change' });
+
+    const el = ref.current;
+    if (!el) return;
+
+    el.classList.add('animate-[scalingSmall_0.3s]');
+    el.addEventListener('animationend', () => el.classList.remove('animate-[scalingSmall_0.3s]'), { once: true });
+  };
+
   return (
     <Link
+      ref={ref}
       href={href}
-      onMouseDown={() => postEvent('web_app_trigger_haptic_feedback', { type: 'selection_change' })}
+      onMouseDown={handleMouseDown}
       className={clsx(
         'min-w-14 h-14 relative rounded-full pb-2 p-1',
         'flex flex-1 flex-col items-center justify-center gap-1.5',
         'text-[11px] leading-none font-normal',
-        'transition-transform duration-200 ease-in-out',
-        'group active:scale-95',
+        'origin-center will-change-transform',
+        'group',
         isDisabled && 'opacity-25',
         isActive ? 'bg-tg-hint-color/10 text-tg-link-color' : 'text-tg-hint-color',
         isUnread &&
