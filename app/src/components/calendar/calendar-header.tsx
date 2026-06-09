@@ -86,26 +86,22 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
   return (
     <div className="absolute top-0 left-0 right-0 z-10 w-full bg-gradient-to-b from-tg-secondary-bg-color/75 to-transparent">
       <div className="flex justify-between items-center gap-2 w-full my-2 px-3">
-        <Button
-          onClick={handleMonthButtonClick}
-          className="bg-tg-section-bg-color/10 !w-auto backdrop-blur-md !rounded-full h-12 border border-tg-text-color/10 overflow-hidden !leading-none capitalize text-nowrap"
-        >
+        <Button onClick={handleMonthButtonClick} variant="blur" size="lg" className="!w-auto capitalize">
           {monthName}
         </Button>
 
         <div className="flex items-center gap-2">
           {hasActiveFilters && (
-            <Button
-              onClick={clearFilters}
-              className="bg-tg-section-bg-color/10 !w-auto backdrop-blur-md !rounded-full h-8 !py-1 !px-3 text-sm border border-tg-text-color/10 overflow-hidden !leading-none text-nowrap"
-            >
+            <Button onClick={clearFilters} variant="blur" size="sm" className="!w-auto">
               Сбросить
             </Button>
           )}
 
           <Button
             onClick={handleFilterButtonClick}
-            className="relative bg-tg-section-bg-color/10 backdrop-blur-md !p-0 !size-12 !rounded-full border border-tg-text-color/10"
+            variant="blur"
+            size="lg"
+            className="!p-0 !size-12 !overflow-visible"
           >
             <Filter className="size-6 mt-1" />
             {hasActiveFilters && (
