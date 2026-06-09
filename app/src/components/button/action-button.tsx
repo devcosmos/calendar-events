@@ -1,9 +1,10 @@
 import Link from 'next/link';
 
 import { Switch } from '@headlessui/react';
-import clsx from 'clsx';
 
 import { ArrowRight } from '@components/icon/outline';
+
+import { cn } from '@utils/helper';
 
 interface ActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string; // Левый заголовок
@@ -25,7 +26,7 @@ export default function ActionButton({
   children,
   ...props
 }: ActionButtonProps) {
-  const buttonClasses = clsx(
+  const buttonClasses = cn(
     'w-full max-w-full flex justify-between items-center gap-3',
     'py-4 px-3.5',
     'border border-tg-section-bg-color rounded-2xl',
@@ -43,7 +44,7 @@ export default function ActionButton({
       {value ? (
         <span className="text-tg-link-color text-end whitespace-nowrap">{value}</span>
       ) : (
-        <ArrowRight className={clsx('!size-5 -me-1.5 fill-tg-button-text-color')} />
+        <ArrowRight className={cn('-me-1.5 fill-tg-button-text-color')} />
       )}
     </>
   );
@@ -69,13 +70,13 @@ export default function ActionButton({
   // Если передан enabled и setEnabled → создаём <Switch> для управления состоянием
   if (enabled !== null && setEnabled) {
     return (
-      <Switch className={clsx(buttonClasses, 'group')} checked={enabled} onChange={setEnabled}>
+      <Switch className={cn(buttonClasses, 'group')} checked={enabled} onChange={setEnabled}>
         <span className="flex items-center gap-4 overflow-hidden">
           {children}
           <span className="whitespace-nowrap overflow-hidden text-ellipsis">{title}</span>
         </span>
-        <div className="inline-flex h-7 w-12 items-center rounded-full transition bg-tg-secondary-bg-color group-data-[checked]:bg-tg-link-color">
-          <span className="size-5 translate-x-1 rounded-full bg-tg-button-text-color transition group-data-[checked]:translate-x-6" />
+        <div className="inline-flex h-7 w-12 items-center rounded-full transition bg-tg-secondary-bg-color group-data-checked:bg-tg-link-color">
+          <span className="size-5 translate-x-1 rounded-full bg-tg-button-text-color transition group-data-checked:translate-x-6" />
         </div>
       </Switch>
     );

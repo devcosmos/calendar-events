@@ -84,7 +84,7 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
     : '';
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-10 w-full bg-gradient-to-b from-tg-secondary-bg-color/75 to-transparent">
+    <div className="absolute top-0 left-0 right-0 z-10 w-full bg-linear-to-b from-tg-secondary-bg-color/75 to-transparent">
       <div className="flex justify-between items-center gap-2 w-full my-2 px-3">
         <HeaderButton onClick={handleMonthButtonClick} size="lg">
           {monthName}
@@ -97,7 +97,7 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
             </HeaderButton>
           )}
 
-          <HeaderButton onClick={handleFilterButtonClick} size="lg" className="!p-0 !size-12 !overflow-visible">
+          <HeaderButton onClick={handleFilterButtonClick} size="lg" className="p-0! size-12! overflow-visible!">
             <Filter className="size-6 mt-1" />
             {hasActiveFilters && (
               <span className="absolute top-0.5 right-0.5 size-2.5 rounded-full bg-tg-button-color border border-tg-bg-color" />

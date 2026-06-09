@@ -3,13 +3,13 @@
 import { usePathname } from 'next/navigation';
 
 import { ComboboxOption } from '@headlessui/react';
-import clsx from 'clsx';
 
 import { ArrowRight, Close, History, Magnifier } from '@components/icon/outline';
 
 import { useFavouritesStore } from '@store/favouritesStore';
 
 import { AppRoute } from '@utils/consts';
+import { cn } from '@utils/helper';
 import { SwimEvent } from '@utils/types';
 
 export default function SearchOption({
@@ -42,20 +42,20 @@ export default function SearchOption({
         className="flex flex-1 items-center cursor-pointer text-lg py-2.5 px-3 select-none capitalize overflow-hidden"
       >
         {isSearchPage && (
-          <div className="w-7 flex-shrink-0">
-            {isEmptyQuery ? <History className="!size-4 opacity-50" /> : <Magnifier className="!size-4 opacity-50" />}
+          <div className="w-7 shrink-0">
+            {isEmptyQuery ? <History className="size-4.5 opacity-50" /> : <Magnifier className="size-4.5 opacity-50" />}
           </div>
         )}
         <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">{entity.name}</span>
-        {!isEmptyQuery && <ArrowRight className="!size-5" />}
+        {!isEmptyQuery && <ArrowRight />}
       </ComboboxOption>
       {isEmptyQuery && isSearchPage && (
-        <button className="bg-transparent border-0 p-3 flex-shrink-0" onClick={() => removeSearchHistoryItem(entity)}>
-          <Close className="!size-5" />
+        <button className="bg-transparent border-0 p-3 shrink-0" onClick={() => removeSearchHistoryItem(entity)}>
+          <Close />
         </button>
       )}
       <div
-        className={clsx('group-last:hidden w-full h-px bg-tg-section-separator-color', isSearchPage ? 'ms-10' : 'ms-3')}
+        className={cn('group-last:hidden w-full h-px bg-tg-section-separator-color', isSearchPage ? 'ms-10' : 'ms-3')}
       />
     </div>
   );

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import clsx from 'clsx';
-
 import { ArrowRight } from '@components/icon/outline';
+
+import { cn } from '@utils/helper';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string; // Если передан href — рендерим ссылку
@@ -11,7 +11,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export default function Button({ href, external = false, addIcon, className, children, ...props }: ButtonProps) {
-  const buttonClasses = clsx(
+  const buttonClasses = cn(
     'relative w-full flex items-center overflow-hidden',
     'py-4 px-3.5',
     'border border-tg-button-color rounded-2xl',
@@ -24,7 +24,7 @@ export default function Button({ href, external = false, addIcon, className, chi
   const ActionButtonBody = (
     <>
       {children}
-      {addIcon && <ArrowRight className={clsx('!size-5 -me-2 !fill-tg-button-text-color')} />}
+      {addIcon && <ArrowRight className={cn('-me-2 fill-tg-button-text-color!')} />}
     </>
   );
 

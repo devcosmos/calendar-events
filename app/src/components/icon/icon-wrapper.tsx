@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@utils/helper';
 
 export default function IconWrapper({
   className,
@@ -9,7 +9,7 @@ export default function IconWrapper({
 }: React.SVGAttributes<SVGElement>) {
   return (
     <svg
-      className={clsx('size-5 fill-tg-text-color flex-shrink-0', className)}
+      className={cn('size-5 fill-tg-text-color shrink-0', className)}
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       viewBox={`0 0 ${width} ${height}`}

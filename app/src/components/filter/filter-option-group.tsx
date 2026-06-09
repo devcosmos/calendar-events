@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import { cn } from '@utils/helper';
 
 type FilterOption<T extends string> = {
   id: T;
@@ -22,7 +22,7 @@ export function FilterOptionGroup<T extends string>({
 }: FilterOptionGroupProps<T>) {
   return (
     <>
-      <div className={clsx('flex items-center justify-between', withTopMargin && 'mt-2')}>
+      <div className={cn('flex items-center justify-between', withTopMargin && 'mt-2')}>
         <span className="text-lg mt-1">{title}</span>
       </div>
 
@@ -34,7 +34,7 @@ export function FilterOptionGroup<T extends string>({
             <button
               key={id}
               onClick={() => onToggle(id)}
-              className={clsx(
+              className={cn(
                 'px-3 py-1.5 rounded-full text-sm border text-nowrap transition-colors',
                 isSelected
                   ? 'bg-tg-button-color text-tg-button-text-color border-tg-button-color'

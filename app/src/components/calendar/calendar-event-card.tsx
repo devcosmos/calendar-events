@@ -1,6 +1,5 @@
 'use client';
 
-import clsx from 'clsx';
 import { format } from 'date-fns';
 import { enUS, ru } from 'date-fns/locale';
 
@@ -11,6 +10,7 @@ import { Locale } from '@core/i18n/config';
 import { useMainStore } from '@store/mainStore';
 
 import { DataQuerySelector } from '@utils/consts';
+import { cn } from '@utils/helper';
 import { SwimEvent } from '@utils/types';
 
 interface CalendarEventCardProps {
@@ -47,8 +47,8 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
     >
       <div className="flex flex-col items-center justify-between">
         <span
-          className={clsx(
-            'border rounded-full size-8 text-sm leading-[0.5] flex justify-center items-center flex-shrink-0 self-start',
+          className={cn(
+            'border rounded-full size-8 text-sm leading-[0.5] flex justify-center items-center shrink-0 self-start',
             isEventNow || isTargetEvent ? 'border-orange' : 'border-tg-text-color/25',
           )}
         >
@@ -56,8 +56,8 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
         </span>
         <FavouriteButton SwimEvent={event} />
       </div>
-      <div className="p-2 pt-1 flex-grow">
-        <h3 className={clsx('text-lg leading-tight mb-2', isEventPassed && !isTargetEvent && 'text-tg-hint-color')}>
+      <div className="p-2 pt-1 grow">
+        <h3 className={cn('text-lg leading-tight mb-2', isEventPassed && !isTargetEvent && 'text-tg-hint-color')}>
           {event.registration_url ? (
             <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
               {event.name}
@@ -71,7 +71,7 @@ export default function CalendarEventCard({ event, ordinal, isTargetEvent = fals
             href={event.location.map_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-tg-link-color text-sm !leading-none"
+            className="text-tg-link-color text-sm leading-none!"
           >
             {event.location.address}
           </a>

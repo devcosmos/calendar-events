@@ -3,9 +3,9 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { ComboboxInput } from '@headlessui/react';
-import clsx from 'clsx';
 
 import { AppRoute } from '@utils/consts';
+import { cn } from '@utils/helper';
 
 interface SearchInputProps {
   inputRef: RefObject<HTMLInputElement | null>;
@@ -51,7 +51,7 @@ export default function SearchInput({ inputRef, query, setQuery }: SearchInputPr
       displayValue={() => query}
       onKeyDown={(event) => event.key === 'Enter' && event.currentTarget.blur()}
       onChange={(event) => setInputValue(event.target.value)}
-      className={clsx(
+      className={cn(
         'block w-full appearance-none py-2.5 px-3 bg-tg-section-bg-color',
         'text-lg text-tg-text-color',
         'border border-transparent rounded-none',

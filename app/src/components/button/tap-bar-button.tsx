@@ -3,9 +3,9 @@ import { useRef } from 'react';
 import Link from 'next/link';
 
 import { postEvent } from '@tma.js/sdk-react';
-import clsx from 'clsx';
 
 import { AppRoute } from '@utils/consts';
+import { cn } from '@utils/helper';
 
 interface TapBarButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: AppRoute;
@@ -41,7 +41,7 @@ export default function TapBarButton({
       ref={ref}
       href={href}
       onMouseDown={handleMouseDown}
-      className={clsx(
+      className={cn(
         'relative min-w-14 h-14 flex flex-1 flex-col items-center justify-center gap-1.5',
         'p-1 pb-2 rounded-full',
         'text-[11px] font-normal leading-none',

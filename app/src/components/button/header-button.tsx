@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@utils/helper';
 
 type ButtonSize = 'sm' | 'lg';
 
@@ -9,9 +9,9 @@ interface BlurButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 export default function HeaderButton({ size = 'lg', className, children, ...props }: BlurButtonProps) {
   return (
     <button
-      className={clsx(
+      className={cn(
         'flex items-center justify-center',
-        'text-nowrap !leading-none capitalize',
+        'text-nowrap leading-none capitalize',
         'w-auto relative backdrop-blur-md overflow-hidden',
         'border border-tg-text-color/10 rounded-full',
         'bg-tg-section-bg-color/10 text-tg-text-color',

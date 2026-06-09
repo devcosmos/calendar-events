@@ -1,6 +1,70 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import 'tailwindcss';
+
+@custom-variant scrollbar (&::-webkit-scrollbar);
+@custom-variant scrollbar-track (&::-webkit-scrollbar-track);
+@custom-variant scrollbar-thumb (&::-webkit-scrollbar-thumb);
+
+@theme inline {
+  --color-orange: #f8a917;
+  --color-tg-bg-color: rgb(var(--tg-theme-bg-color));
+  --color-tg-text-color: rgb(var(--tg-theme-text-color));
+  --color-tg-hint-color: rgb(var(--tg-theme-hint-color));
+  --color-tg-link-color: rgb(var(--tg-theme-link-color));
+  --color-tg-button-color: rgb(var(--tg-theme-button-color));
+  --color-tg-button-text-color: rgb(var(--tg-theme-button-text-color));
+  --color-tg-secondary-bg-color: rgb(var(--tg-theme-secondary-bg-color));
+  --color-tg-header-bg-color: rgb(var(--tg-theme-header-bg-color));
+  --color-tg-bottom-bar-bg-color: rgb(var(--tg-theme-bottom-bar-bg-color));
+  --color-tg-accent-text-color: rgb(var(--tg-theme-accent-text-color));
+  --color-tg-section-bg-color: rgb(var(--tg-theme-section-bg-color));
+  --color-tg-section-header-text-color: rgb(var(--tg-theme-section-header-text-color));
+  --color-tg-section-separator-color: rgb(var(--tg-theme-section-separator-color));
+  --color-tg-subtitle-text-color: rgb(var(--tg-theme-subtitle-text-color));
+  --color-tg-destructive-text-color: rgb(var(--tg-theme-destructive-text-color));
+
+  --animate-shimmer: shimmer 1s linear infinite;
+  --animate-pulse: pulse 2s ease-in-out infinite;
+  --animate-scaling: scaling 0.5s ease;
+  --animate-scaling-small: scalingSmall 0.3s ease;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes scaling {
+  0%,
+  80%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.7);
+  }
+}
+
+@keyframes scalingSmall {
+  0%,
+  80%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.9);
+  }
+}
 
 html,
 body {
@@ -9,29 +73,21 @@ body {
 
 @layer base {
   html {
-    @apply overflow-hidden overscroll-y-contain min-h-full scrollbar:!hidden;
+    @apply overflow-hidden overscroll-y-contain min-h-full scrollbar:hidden!;
   }
   body {
     @apply text-tg-text-color bg-tg-secondary-bg-color;
-    @apply overflow-x-hidden overscroll-y-contain min-h-full scrollbar:!hidden;
+    @apply overflow-x-hidden overscroll-y-contain min-h-full scrollbar:hidden!;
   }
   main {
     height: var(--tg-viewport-height, 100dvh);
     min-height: 100dvh;
-    /* padding-bottom: var(--tg-viewport-safe-area-inset-bottom, 0px); */
   }
 }
 
 @layer utilities {
   .scrollbar {
-    @apply scrollbar:!w-0 scrollbar:!hidden scrollbar:!h-1.5 scrollbar:bg-transparent;
-    @apply scrollbar-thumb:!border-0;
-  }
-  .visually-hidden {
-    @apply !w-px !h-px !p-0 !-mt-px !overflow-hidden !whitespace-nowrap !border-0;
-    clip: rect(0, 0, 0, 0) !important;
-  }
-  .siblings-col-span-2 ~ span {
-    grid-column: span 2 / span 2;
+    @apply scrollbar:w-0! scrollbar:hidden! scrollbar:h-1.5! scrollbar:bg-transparent;
+    @apply scrollbar-thumb:border-0;
   }
 }

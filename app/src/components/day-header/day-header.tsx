@@ -1,6 +1,5 @@
 import { useTranslations } from 'next-intl';
 
-import clsx from 'clsx';
 import { addDays, format, isAfter, isEqual, startOfDay } from 'date-fns';
 import { enUS, ru } from 'date-fns/locale';
 
@@ -9,6 +8,7 @@ import { Locale } from '@core/i18n/config';
 import { useMainStore } from '@store/mainStore';
 
 import { DataQuerySelector } from '@utils/consts';
+import { cn } from '@utils/helper';
 
 export default function DayHeader({
   date,
@@ -36,7 +36,7 @@ export default function DayHeader({
         {...((isToday || isNearest || isTomorrow) && {
           [DataQuerySelector.Today]: '',
         })}
-        className={clsx('grid mb-3 mt-2.5', isToday || isTomorrow || isNearest ? 'grid-cols-4' : 'grid-cols-2')}
+        className={cn('grid mb-3 mt-2.5', isToday || isTomorrow || isNearest ? 'grid-cols-4' : 'grid-cols-2')}
       >
         {children}
         <span>

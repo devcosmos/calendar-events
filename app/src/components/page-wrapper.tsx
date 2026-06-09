@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { backButton, settingsButton } from '@tma.js/sdk-react';
-import clsx from 'clsx';
 
 import TabBar from '@components/tab-bar/tab-bar';
 
@@ -15,6 +14,7 @@ import { useRapidClick } from '@hooks/useRapidClick';
 import { useMainStore } from '@store/mainStore';
 
 import { AppRoute } from '@utils/consts';
+import { cn } from '@utils/helper';
 
 export default function PageWrapper({
   children,
@@ -69,11 +69,11 @@ export default function PageWrapper({
     <main className="flex flex-col overflow-hidden">
       <div className="relative flex-1">
         <div className="absolute top-0 bottom-0 left-0 right-0 w-full">
-          <div className={clsx('h-full overflow-auto scrollbar px-3 pb-28', className)}>
+          <div className={cn('h-full overflow-auto scrollbar px-3 pb-28', className)}>
             {title && (
               <h1
                 onClick={title === AppRoute.Settings ? handleClick : undefined}
-                className={hideTitle ? 'visually-hidden' : 'text-lg mt-6 mb-3'}
+                className={hideTitle ? 'sr-only' : 'text-lg mt-6 mb-3'}
               >
                 {t(title)}
               </h1>
