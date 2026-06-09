@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin('./app/src/core/i18n/i18n.ts');
 const nextConfig: NextConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? '',
   trailingSlash: true,
+  allowedDevOrigins: ['192.168.3.64'],
   async headers() {
     return [
       {
