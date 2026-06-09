@@ -4,51 +4,27 @@ import clsx from 'clsx';
 
 import { ArrowRight } from '@components/icon/outline';
 
-type ButtonVariant = 'default' | 'outline' | 'blur';
-type ButtonSize = 'md' | 'lg' | 'sm';
-
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string; // Если передан href — рендерим ссылку
   external?: boolean; // Открывать в новой вкладке
-  variant?: ButtonVariant;
-  size?: ButtonSize;
   addIcon?: boolean; // Добавить Chevron Right
 }
 
-export default function Button({
-  href,
-  external = false,
-  variant = 'default',
-  size = 'md',
-  addIcon,
-  className,
-  children,
-  ...props
-}: ButtonProps) {
+export default function Button({ href, external = false, addIcon, className, children, ...props }: ButtonProps) {
   const buttonClasses = clsx(
-    'w-full flex items-center border overflow-hidden relative',
-    'text-nowrap leading-none',
-    size === 'md' && 'py-2 px-4 text-lg rounded-lg',
-    size === 'lg' && 'h-12 px-4 text-lg rounded-full',
-    size === 'sm' && 'h-8 py-1 px-3 text-sm rounded-full',
+    'relative w-full flex items-center overflow-hidden',
+    'py-4 px-3.5',
+    'border border-tg-button-color rounded-2xl',
+    'bg-tg-button-color text-tg-button-text-color',
+    'text-lg font-normal leading-none text-nowrap',
     addIcon ? 'justify-between gap-3' : 'justify-center',
-    variant === 'default' && 'bg-tg-button-color border-tg-button-color text-tg-button-text-color',
-    variant === 'outline' && 'bg-transparent border-tg-link-color text-tg-link-color',
-    variant === 'blur' && 'bg-tg-section-bg-color/10 backdrop-blur-md border-tg-text-color/10 text-tg-text-color',
     className,
   );
 
   const ActionButtonBody = (
     <>
       {children}
-      {addIcon && (
-        <ArrowRight
-          className={clsx(
-            '!size-5 -me-2',
-            variant === 'outline' ? '!fill-tg-link-color' : '!fill-tg-button-text-color',
-          )}
-        />
-      )}
+      {addIcon && <ArrowRight className={clsx('!size-5 -me-2 !fill-tg-button-text-color')} />}
     </>
   );
 

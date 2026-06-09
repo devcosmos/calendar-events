@@ -26,10 +26,11 @@ export default function ActionButton({
   ...props
 }: ActionButtonProps) {
   const buttonClasses = clsx(
-    'w-full py-4 px-3.5 bg-tg-section-bg-color',
-    'flex justify-between items-center gap-3 max-w-full',
-    'text-lg leading-[1.125] font-normal text-tg-text-color',
-    'border rounded-2xl border-tg-section-bg-color ',
+    'w-full max-w-full flex justify-between items-center gap-3',
+    'py-4 px-3.5',
+    'border border-tg-section-bg-color rounded-2xl',
+    'bg-tg-section-bg-color text-tg-text-color',
+    'text-lg font-normal leading-[1.125]',
     className,
   );
 

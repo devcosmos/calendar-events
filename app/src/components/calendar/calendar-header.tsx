@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
-import Button from '@components/button/button';
+import HeaderButton from '@components/button/header-button';
 import { Filter } from '@components/icon/outline';
 
 import { useCalendarNavigation } from '@hooks/useCalendarNavigation';
@@ -86,28 +86,23 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
   return (
     <div className="absolute top-0 left-0 right-0 z-10 w-full bg-gradient-to-b from-tg-secondary-bg-color/75 to-transparent">
       <div className="flex justify-between items-center gap-2 w-full my-2 px-3">
-        <Button onClick={handleMonthButtonClick} variant="blur" size="lg" className="!w-auto capitalize">
+        <HeaderButton onClick={handleMonthButtonClick} size="lg">
           {monthName}
-        </Button>
+        </HeaderButton>
 
         <div className="flex items-center gap-2">
           {hasActiveFilters && (
-            <Button onClick={clearFilters} variant="blur" size="sm" className="!w-auto">
+            <HeaderButton onClick={clearFilters} size="sm">
               Сбросить
-            </Button>
+            </HeaderButton>
           )}
 
-          <Button
-            onClick={handleFilterButtonClick}
-            variant="blur"
-            size="lg"
-            className="!p-0 !size-12 !overflow-visible"
-          >
+          <HeaderButton onClick={handleFilterButtonClick} size="lg" className="!p-0 !size-12 !overflow-visible">
             <Filter className="size-6 mt-1" />
             {hasActiveFilters && (
               <span className="absolute top-0.5 right-0.5 size-2.5 rounded-full bg-tg-button-color border border-tg-bg-color" />
             )}
-          </Button>
+          </HeaderButton>
         </div>
       </div>
     </div>

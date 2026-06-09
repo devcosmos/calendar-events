@@ -42,11 +42,10 @@ export default function TapBarButton({
       href={href}
       onMouseDown={handleMouseDown}
       className={clsx(
-        'min-w-14 h-14 relative rounded-full pb-2 p-1',
-        'flex flex-1 flex-col items-center justify-center gap-1.5',
-        'text-[11px] leading-none font-normal',
+        'relative min-w-14 h-14 flex flex-1 flex-col items-center justify-center gap-1.5',
+        'p-1 pb-2 rounded-full',
+        'text-[11px] font-normal leading-none',
         'origin-center will-change-transform',
-        'group',
         isDisabled && 'opacity-25',
         isActive ? 'bg-tg-hint-color/10 text-tg-link-color' : 'text-tg-hint-color',
         isUnread &&

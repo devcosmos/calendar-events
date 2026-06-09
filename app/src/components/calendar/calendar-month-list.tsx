@@ -1,18 +1,16 @@
 'use client';
 
-import clsx from 'clsx';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useShallow } from 'zustand/react/shallow';
 
-import Button from '@components/button/button';
+import MonthButton from '@components/button/month-button';
 
 import { useCalendarNavigation } from '@hooks/useCalendarNavigation';
 
 import { useCalendarStore } from '@store/calendarStore';
 import { selectEventFilters, useFilterStore } from '@store/filterStore';
 
-import { DataQuerySelector } from '@utils/consts';
 import { filterEventsByFilters } from '@utils/eventFilter';
 import { plural } from '@utils/helper';
 import { CalendarMonth } from '@utils/types';
@@ -77,37 +75,16 @@ export default function CalendarMonthList({ months }: CalendarMonthListProps) {
               const isPast = currMonthIndex !== null && idx < currMonthIndex;
 
               return (
-                <Button
+                <MonthButton
                   key={`${month.year}-${month.month}`}
-                  className="!bg-tg-section-bg-color !border-tg-section-bg-color text-tg-text-color !rounded-2xl ps-1 !py-1"
-                  addIcon
-                  {...(isCurrent && { [DataQuerySelector.CurrentMonthButton]: '' })}
+                  month={month}
+                  label={label}
+                  isCurrent={isCurrent}
+                  isSelected={isSelected}
+                  isPast={isPast}
+                  filteredCount={getFilteredEventCount(month.events)}
                   onClick={() => handleMonthClick(idx)}
-                >
-                  <div className="flex gap-3.5 items-center">
-                    <span className="border border-tg-text-color/25 rounded-full size-8 text-sm leading-none pt-[1px] flex justify-center items-center flex-shrink-0">
-                      {month.month}
-                    </span>
-                    <span
-                      className={clsx(
-                        'capitalize flex items-baseline',
-                        isPast && !isSelected && 'opacity-25',
-                        isCurrent && '!text-orange !opacity-100',
-                        isSelected && !isCurrent && 'text-tg-link-color !opacity-100',
-                      )}
-                    >
-                      {label}
-                      {(() => {
-                        const filteredCount = getFilteredEventCount(month.events);
-                        return (
-                          filteredCount > 0 && (
-                            <span className="text-base opacity-50">&nbsp;&mdash;&nbsp;{filteredCount}</span>
-                          )
-                        );
-                      })()}
-                    </span>
-                  </div>
-                </Button>
+                />
               );
             })}
           </div>

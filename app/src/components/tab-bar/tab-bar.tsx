@@ -2,9 +2,9 @@
 
 import { useTranslations } from 'next-intl';
 
+import TapBarButton from '@components/button/tap-bar-button';
 import { Calendar, CircleUser, Mark } from '@components/icon/bold';
 import { Magnifier } from '@components/icon/outline';
-import TapBarButton from '@components/tab-bar/tap-bar-button';
 
 import { useTabBarEvents } from '@hooks/useTabBarEvents';
 
