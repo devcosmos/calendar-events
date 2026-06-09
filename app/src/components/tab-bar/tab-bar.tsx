@@ -8,7 +8,7 @@ import TapBarButton from '@components/tab-bar/tap-bar-button';
 
 import { useTabBarEvents } from '@hooks/useTabBarEvents';
 
-import { AppRoute, DataQuerySelector, TabBarButton } from '@utils/consts';
+import { AppRoute, TabBarButton } from '@utils/consts';
 
 export default function TabBar() {
   const t = useTranslations('tab-bar');
@@ -28,7 +28,7 @@ export default function TabBar() {
         <TapBarButton
           href={AppRoute.Home}
           title={t(TabBarButton.Calendar)}
-          onClick={(event) => handleNavigationButtonClick(event, DataQuerySelector.Today)}
+          onClick={handleNavigationButtonClick}
           isActive={pathname === AppRoute.Home}
         >
           <Calendar className="size-6" />

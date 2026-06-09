@@ -2,7 +2,7 @@ import { usePathname } from 'next/navigation';
 
 import { useCalendarNavigation } from '@hooks/useCalendarNavigation';
 
-import { AppRoute, DataQuerySelector } from '@utils/consts';
+import { AppRoute } from '@utils/consts';
 
 export const useTabBarEvents = () => {
   const pathname = usePathname();
@@ -10,13 +10,12 @@ export const useTabBarEvents = () => {
 
   const { goToCurrentMonth } = useCalendarNavigation();
 
-  const handleNavigationButtonClick = (
-    event: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>,
-    _querySelector: DataQuerySelector.Today,
-  ) => {
+  const handleNavigationButtonClick = (event: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>) => {
     if (!isOnCalendar) return;
+
     event.preventDefault();
     event.nativeEvent.stopImmediatePropagation();
+
     goToCurrentMonth();
   };
 
