@@ -57,13 +57,30 @@ export default function CalendarSlider({
     if (emblaApi) setEmblaApi(emblaApi);
   }, [emblaApi, setEmblaApi]);
 
-  // ── 2. When selected month changes, reInit so Embla picks up new DOM nodes,
-  //  then scroll the center slide to today.
+  // ── 2. При смене месяца: reInit подхватывает новые DOM-узлы, затем переход к центру.
+  //  Если пользователь на слайде-0 (список месяцев) — анимируем скролл к центру.
+  //  Иначе — мгновенный reInit с центральным стартовым индексом.
   useEffect(() => {
     if (!emblaApi) return;
 
-    emblaApi.reInit({ startIndex: centerSlideIndex });
-    scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
+    const isOnListSlide = emblaApi.selectedScrollSnap() === 0;
+
+    if (isOnListSlide) {
+      emblaApi.reInit({ startIndex: 0 });
+      emblaApi.scrollTo(centerSlideIndex);
+
+      const onSelect = () => {
+        if (emblaApi.selectedScrollSnap() !== centerSlideIndex) return;
+
+        emblaApi.off('select', onSelect);
+        scrollSlideToSelector(emblaApi.slideNodes()[emblaApi.selectedScrollSnap()], DataQuerySelector.Today);
+      };
+
+      emblaApi.on('select', onSelect);
+    } else {
+      emblaApi.reInit({ startIndex: centerSlideIndex });
+      scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
+    }
   }, [displayIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── 3. Initial load: scroll to today in the starting slide ────────────────
