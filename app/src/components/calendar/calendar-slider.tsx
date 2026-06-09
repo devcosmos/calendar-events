@@ -79,7 +79,7 @@ export default function CalendarSlider({
       emblaApi.on('select', onSelect);
     } else {
       emblaApi.reInit({ startIndex: centerSlideIndex });
-      scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
+      scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today, 'smooth');
     }
   }, [displayIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
