@@ -11,19 +11,19 @@ export const useCalendarNavigation = () => {
   const selectedMonthIndex = useCalendarStore((s) => s.selectedMonthIndex);
   const setSelectedMonthIndex = useCalendarStore((s) => s.setSelectedMonthIndex);
 
-  /** Navigate to a specific month by index */
+  /** Перейти к конкретному месяцу по индексу */
   const goToMonth = useCallback((index: number) => setSelectedMonthIndex(index), [setSelectedMonthIndex]);
 
   /**
-   * Navigate to today's month and scroll the center slide to today.
+   * Перейти к текущему месяцу и прокрутить центральный слайд к сегодняшнему дню.
    *
-   * When month changes: setSelectedMonthIndex → CalendarSlider Effect #2 →
+   * При смене месяца: setSelectedMonthIndex → CalendarSlider Эффект №2 →
    * reInit + scrollSlideToSelector.
    *
-   * When already on the same month but on list/filter slide: manually
-   * scrollTo(center) and scroll to today after settle.
+   * Если уже на нужном месяце, но на слайде списка или фильтра: вручную
+   * scrollTo(center), затем скролл к сегодня после события select.
    *
-   * When already on the center slide of the current month: scroll directly.
+   * Если уже на центральном слайде текущего месяца: скроллим напрямую.
    */
   const goToCurrentMonth = useCallback(() => {
     if (currMonthIndex === null || !emblaApi) return;
@@ -33,24 +33,25 @@ export const useCalendarNavigation = () => {
     const center = currMonthIndex > 0 ? 2 : 1;
 
     if (emblaApi.selectedScrollSnap() === center) {
-      // Already on the correct slide — scroll vertically to today
-      scrollSlideToSelector(emblaApi.slideNodes()[center], DataQuerySelector.Today);
+      // Уже на нужном слайде — вертикальный скролл к сегодня
+      scrollSlideToSelector(emblaApi.slideNodes()[center], DataQuerySelector.Today, 'smooth');
+
       return;
     }
 
     if (selectedMonthIndex === currMonthIndex) {
-      // Same month, different slide — navigate to center then scroll to today
-      const onSettle = () => {
-        emblaApi.off('settle', onSettle);
-        scrollSlideToSelector(emblaApi.slideNodes()[emblaApi.selectedScrollSnap()], DataQuerySelector.Today);
+      // Тот же месяц, другой слайд — переходим к центру, затем скроллим к сегодня
+      const onSelect = () => {
+        emblaApi.off('select', onSelect);
+        scrollSlideToSelector(emblaApi.slideNodes()[emblaApi.selectedScrollSnap()], DataQuerySelector.Today, 'smooth');
       };
-      emblaApi.on('settle', onSettle);
+      emblaApi.on('select', onSelect);
       emblaApi.scrollTo(center);
     }
-    // else: month changed → CalendarSlider Effect #2 handles reInit + scroll
+    // иначе: месяц сменился → CalendarSlider Эффект №2 сам выполнит reInit + скролл
   }, [currMonthIndex, emblaApi, selectedMonthIndex, setSelectedMonthIndex]);
 
-  /** Scroll the carousel to the slide that carries [data-selected-month-slide] */
+  /** Прокрутить карусель к слайду с [data-selected-month-slide] */
   const scrollToSelectedMonthSlide = useCallback(() => {
     if (!emblaApi) return;
 
@@ -58,14 +59,14 @@ export const useCalendarNavigation = () => {
     if (idx !== -1) emblaApi.scrollTo(idx);
   }, [emblaApi]);
 
-  /** Open the month list panel (leftmost slide) */
+  /** Открыть панель списка месяцев (крайний левый слайд) */
   const openMonthList = useCallback(() => {
     if (!emblaApi) return;
 
     emblaApi.scrollTo(0);
   }, [emblaApi]);
 
-  /** Open the filter panel (rightmost slide) */
+  /** Открыть панель фильтров (крайний правый слайд) */
   const openFilterPanel = useCallback(() => {
     if (!emblaApi) return;
 

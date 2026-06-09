@@ -70,7 +70,7 @@ export default function CalendarSlider({
   useEffect(() => {
     if (!emblaApi) return;
 
-    scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today);
+    scrollSlideToSelector(emblaApi.slideNodes()[centerSlideIndex], DataQuerySelector.Today, 'smooth');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emblaApi]);
 
