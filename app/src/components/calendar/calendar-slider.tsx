@@ -93,7 +93,21 @@ export default function CalendarSlider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emblaApi]);
 
-  // ── 4. Deep link: scroll to a specific event card ─────────────────────────
+  // ── 4. Scroll month list to current month when user swipes to slide 0 ──────
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const onSelect = () => {
+      if (emblaApi.selectedScrollSnap() !== 0) return;
+
+      scrollSlideToSelector(emblaApi.slideNodes()[0], DataQuerySelector.CurrentMonthButton);
+    };
+
+    emblaApi.on('select', onSelect);
+    return () => void emblaApi.off('select', onSelect);
+  }, [emblaApi]);
+
+  // ── 5. Deep link: scroll to a specific event card ─────────────────────────
   useEffect(() => {
     if (!emblaApi || !targetEventId) return;
 

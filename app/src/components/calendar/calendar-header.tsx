@@ -35,13 +35,19 @@ export default function CalendarHeader({ months }: CalendarHeaderProps) {
   const isOnFilter = totalSlides > 0 && activeSlideIndex === totalSlides - 1;
 
   const handleMonthButtonClick = () => {
-    if (isOnList) scrollToSelectedMonthSlide();
-    else openMonthList();
+    if (isOnList) {
+      scrollToSelectedMonthSlide();
+    } else {
+      openMonthList();
+    }
   };
 
   const handleFilterButtonClick = () => {
-    if (isOnFilter) scrollToSelectedMonthSlide();
-    else openFilterPanel();
+    if (isOnFilter) {
+      scrollToSelectedMonthSlide();
+    } else {
+      openFilterPanel();
+    }
   };
 
   useEffect(() => {

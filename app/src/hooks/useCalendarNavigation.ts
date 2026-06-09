@@ -72,7 +72,6 @@ export const useCalendarNavigation = () => {
     if (!emblaApi) return;
 
     emblaApi.scrollTo(0);
-    scrollSlideToSelector(emblaApi.slideNodes()[0], DataQuerySelector.CurrentMonthButton);
   }, [emblaApi]);
 
   /** Open the filter panel (rightmost slide) */
